@@ -23,6 +23,6 @@ public class intakeSubsystem extends SubsystemBase {
   }
 
   public void intakeRun(double speed){
-    a_rollerIntake.set(speed);
+    a_rollerIntake.set(-speed);
   }
 }

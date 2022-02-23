@@ -23,6 +23,6 @@ public class shooterSubsystem extends SubsystemBase {
   }
 
   public void shooterRun(double speed){   
-    a_shooter.set(speed);
+    a_shooter.set(-speed);
   }
 }

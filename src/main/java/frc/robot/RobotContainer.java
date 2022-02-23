@@ -59,9 +59,9 @@ public class RobotContainer {
 
     a_robotDrive.setDefaultCommand(
       new RunCommand(() -> a_robotDrive.arcadeDrive(
-        a_driverController.getRightTriggerAxis()
-           - a_driverController.getLeftTriggerAxis(),
-        a_driverController.getLeftX()
+        (a_driverController.getRightTriggerAxis()
+           - a_driverController.getLeftTriggerAxis())* SpeedConstants.driveSpeed,
+        a_driverController.getLeftX() * SpeedConstants.turnSpeed
       ), a_robotDrive));
   
       SmartDashboard.putData(a_robotDrive);

@@ -16,10 +16,10 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
  */
 public final class Constants {
     public static final class DriveConstants{
-        public static final int aLeftDrivePort1 = 0;
-        public static final int aLeftDrivePort2 = 1;
-        public static final int aRightDrivePort1 = 2;
-        public static final int aRightDrivePort2 = 3;
+        public static final int aLeftDrivePort1 = 1;
+        public static final int aLeftDrivePort2 = 2;
+        public static final int aRightDrivePort1 = 4;
+        public static final int aRightDrivePort2 = 5;
 
         public static final double aTrackwidthMeters = 1.1;
         public static final DifferentialDriveKinematics aDriveKinematics =
@@ -48,14 +48,14 @@ public final class Constants {
 
     public static final class MechConstants{
         //shooter subsystem
-        public static final int aShooterPort1 = 4;
+        public static final int aShooterPort1 = 3;
                 //intake subsystem
-        public static final int aRollerPort = 5;
+        public static final int aRollerPort = 8;
         public static final int aArmPort = 6;
                 //transition subsystem
-        public static final int aTransitionPort = 7;
+        public static final int aTransitionPort = 5;
                 //flabber
-        public static final int aFlapper = 8;
+        public static final int aFlapper = 7;
                 //lift
         public static final int aLiftPort = 9;
                 //winch
@@ -70,7 +70,8 @@ public final class Constants {
         public static final int aOperatorControllerPort = 1;
     }
     public static final class SpeedConstants{
-        public static final double speedMoniter = 0.5;
+        public static final double turnSpeed = 0.5;
+        public static final double driveSpeed = 0.7;
         public static final double aArmSpeed = 0.5;
         public static final double aRollerSpeed = 0.5;
         public static final double aTransitionSpeed = 0.5;

@@ -23,7 +23,7 @@ public class transitionSubsystem extends SubsystemBase {
   }
 
   public void transitionRun(double speed){
-    a_transition.set(speed);
+    a_transition.set(-speed);
   }
 
   public void transitionStop(){
