@@ -32,7 +32,7 @@ public final class Constants {
             new DifferentialDriveKinematics(aTrackwidthMeters);
 
         public static final double aGearRatio = 10.93;
-        public static final int aEncoderCPR = 20;
+        public static final int aEncoderCPR = 2040;
         public static final double aWheelDiameterMeters = 0.16;
         public static final double aEncoderDistancePerPulse = 
             (aWheelDiameterMeters * Math.PI) / (double) aEncoderCPR;

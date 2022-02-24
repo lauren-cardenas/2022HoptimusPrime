@@ -28,6 +28,7 @@ public class DriveTimeCommand extends CommandBase {
   @Override
   public void initialize() {
     m_drive.arcadeDrive(m_speed, 0);
+    m_drive.resetEncoders();
     timer.reset();
     timer.start();
   }
