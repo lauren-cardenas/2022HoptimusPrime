@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.XboxController.Button;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -15,13 +16,18 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static final class DriverButtons{
+        public static final int bArmUp = Button.kA.value;
+        public static final int bArmDown = Button.kB.value;
+    }
+    
     public static final class DriveConstants{
         public static final int aLeftDrivePort1 = 1;
         public static final int aLeftDrivePort2 = 2;
         public static final int aRightDrivePort1 = 4;
         public static final int aRightDrivePort2 = 5;
 
-        public static final double aTrackwidthMeters = 1.1;
+        public static final double aTrackwidthMeters = 0.24; //1.1;
         public static final DifferentialDriveKinematics aDriveKinematics =
             new DifferentialDriveKinematics(aTrackwidthMeters);
 
@@ -70,8 +76,8 @@ public final class Constants {
         public static final int aOperatorControllerPort = 1;
     }
     public static final class SpeedConstants{
-        public static final double turnSpeed = 0.5;
-        public static final double driveSpeed = 0.7;
+        public static final double turnSpeed = 0.7;
+        public static final double driveSpeed = 1;
         public static final double aArmSpeed = 0.5;
         public static final double aRollerSpeed = 0.5;
         public static final double aTransitionSpeed = 0.5;

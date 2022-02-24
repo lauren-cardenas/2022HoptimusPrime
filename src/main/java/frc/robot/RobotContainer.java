@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.DriverButtons;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SpeedConstants;
 import frc.robot.commands.ArmControlDown;
@@ -91,7 +92,7 @@ public class RobotContainer {
     .whenPressed(() -> a_rollerIntake.intakeRun(SpeedConstants.aRollerSpeed))
     .whenReleased(() -> a_rollerIntake.intakeRun(0.0));
 
-    new JoystickButton(a_driverController, Button.kA.value)
+    new JoystickButton(a_driverController, DriverButtons.bArmUp)
     .whenPressed(new ArmControlUp(a_arm))
     .whenReleased(() -> a_arm.intakeArmStop());
 
