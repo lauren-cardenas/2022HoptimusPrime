@@ -48,8 +48,8 @@ public final class Constants {
     }
 
     public static final class AutoConstants{
-        public static final double kAutoDriveTime = 5;
-        public static final double kAutoDriveSpeed = 0.5;
+        public static final double kAutoDriveTime = 3;
+        public static final double kAutoDriveSpeed = -0.5;
     }
 
     public static final class MechConstants{
