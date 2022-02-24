@@ -64,6 +64,7 @@ public class RobotContainer {
         a_driverController.getLeftX() * SpeedConstants.turnSpeed
       ), a_robotDrive));
   
+      // Must be there, CTRE is dumb and like... forces you to do that
       SmartDashboard.putData(a_robotDrive);
       a_robotDrive.displayEncoderValues();
 
