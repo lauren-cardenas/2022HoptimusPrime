@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
@@ -15,6 +14,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SpeedConstants;
 import frc.robot.commands.ArmControlDown;
 import frc.robot.commands.ArmControlUp;
+import frc.robot.commands.ArmDownIntakeOn;
 import frc.robot.commands.DriveTimeCommand;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.driveSubsystem;
@@ -84,11 +84,14 @@ public class RobotContainer {
 
     //*************driver****************//
 
-    new JoystickButton(a_driverController, Button.kRightBumper.value)
+    new JoystickButton(a_driverController, DriverButtons.bShooterRun)
     .whenPressed(() -> a_shooter.shooterRun(SpeedConstants.aHighShootSpeed))
     .whenReleased(() -> a_shooter.shooterRun(0.0));
+    
+    a_transition.setDefaultCommand(
+      new RunCommand(() -> a_transition.transitionRun(-a_driverController.getRightY()),a_transition));
 
-    new JoystickButton(a_driverController, Button.kX.value)
+    new JoystickButton(a_driverController, DriverButtons.bIntakeRun)
     .whenPressed(() -> a_rollerIntake.intakeRun(SpeedConstants.aRollerSpeed))
     .whenReleased(() -> a_rollerIntake.intakeRun(0.0));
 
@@ -96,42 +99,45 @@ public class RobotContainer {
     .whenPressed(new ArmControlUp(a_arm))
     .whenReleased(() -> a_arm.intakeArmStop());
 
-    new JoystickButton(a_driverController, Button.kB.value)
+    new JoystickButton(a_driverController, DriverButtons.bArmDown)
     .whenPressed(new ArmControlDown(a_arm))
     .whenReleased(() -> a_arm.intakeArmStop());
 
-    new JoystickButton(a_driverController, Button.kY.value)
-    .whenPressed(() -> a_transition.transitionRun(SpeedConstants.aTransitionSpeed))
-    .whenReleased(() -> a_transition.transitionStop());
+    // new JoystickButton(a_driverController, DriverButtons.bTransitionRun)
+    // .whenPressed(() -> a_transition.transitionRun(SpeedConstants.aTransitionSpeed))
+    // .whenReleased(() -> a_transition.transitionStop());
 
-    new JoystickButton(a_driverController, Button.kLeftBumper.value)
-    .whenPressed(() -> a_flabber.flapperRun(SpeedConstants.aFlabberSpeed))
-    .whenReleased(() -> a_flabber.flapperRun(0.0));
+    // new JoystickButton(a_driverController, DriverButtons.bFlapperRun)
+    // .whenPressed(() -> a_flabber.flapperRun(SpeedConstants.aFlabberSpeed))
+    // .whenReleased(() -> a_flabber.flapperRun(0.0));
 
     //*************operator****************//
-    new JoystickButton(a_operatorController, Button.kY.value)
+    new JoystickButton(a_operatorController, DriverButtons.bShooterRunOperator)
     .whenPressed(() -> a_shooter.shooterRun(SpeedConstants.aHighShootSpeed))
     .whenReleased(() -> a_shooter.shooterRun(0.0));
 
-    new JoystickButton(a_operatorController, Button.kX.value)
+    new JoystickButton(a_operatorController, DriverButtons.bIntakeRun)
     .whenPressed(() -> a_rollerIntake.intakeRun(SpeedConstants.aRollerSpeed))
     .whenReleased(() -> a_rollerIntake.intakeRun(0.0));
 
-    new JoystickButton(a_operatorController, Button.kA.value)
+    new JoystickButton(a_operatorController, DriverButtons.bArmUp)
     .whenPressed(new ArmControlUp(a_arm))
     .whenReleased(() -> a_arm.intakeArmStop());
 
-    new JoystickButton(a_operatorController, Button.kB.value)
+    new JoystickButton(a_operatorController, DriverButtons.bArmDown)
     .whenPressed(new ArmControlDown(a_arm))
     .whenReleased(() -> a_arm.intakeArmStop());
 
-    new JoystickButton(a_operatorController, Button.kRightBumper.value)
-    .whenPressed(() -> a_lift.liftRun(SpeedConstants.aLiftSpeed))
+    new JoystickButton(a_operatorController, DriverButtons.bLiftRun)
+    .whenPressed(() -> a_lift.liftRun(-SpeedConstants.aLiftSpeed))
     .whenReleased(() -> a_lift.liftRun(0.0));
 
-    new JoystickButton(a_operatorController, Button.kLeftBumper.value)
-    .whenPressed(() -> a_lift.winchRun(SpeedConstants.aWinchSpeed))
+    new JoystickButton(a_operatorController, DriverButtons.bWinchRun)
+    .whenPressed(() -> a_lift.winchRun(-SpeedConstants.aWinchSpeed))
     .whenReleased(() -> a_lift.winchRun(0.0));
+
+    a_transition.setDefaultCommand(
+      new RunCommand(() -> a_transition.transitionRun(-a_driverController.getRightY()),a_transition));
   }
 
   /**

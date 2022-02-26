@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
@@ -14,6 +16,7 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.SpeedConstants;
 
 public class driveSubsystem extends SubsystemBase {
   /** Creates a new driveSubsystem. */
@@ -35,6 +38,16 @@ public class driveSubsystem extends SubsystemBase {
     a_backLeft.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,0,0);
     a_frontRight.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,0,0);
     a_backRight.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,0,0);
+
+    a_frontLeft.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit/2, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
+    a_frontRight.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 10, 15, 0.5));
+    a_backLeft.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 10, 15, 0.5));
+    a_backRight.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 10, 15, 0.5));
+
+    a_frontLeft.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 25, 1.0));
+    a_frontRight.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 25, 1.0));
+    a_backLeft.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 25, 1.0));
+    a_backRight.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 25, 1.0));
   }
 
   @Override
@@ -94,5 +107,11 @@ public class driveSubsystem extends SubsystemBase {
 
   public void setMaxOutput(double maxOutput) {
     a_drive.setMaxOutput(maxOutput);
+  }
+  public void setHalfSpeed(){
+    SpeedConstants.driveSpeed = 0.35;
+  }
+  public void setNormalSpeed(){
+    SpeedConstants.driveSpeed = 0.7;
   }
 }

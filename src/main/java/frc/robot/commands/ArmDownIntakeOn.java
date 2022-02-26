@@ -5,39 +5,41 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.SpeedConstants;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.intakeSubsystem;
 
-public class ArmControlDown extends CommandBase {
-  /** Creates a new ArmControlDown. */
+public class ArmDownIntakeOn extends CommandBase {
+  /** Creates a new ArmDownIntakeOn. */
   private final armSubsystem a_armDown;
-
-  public ArmControlDown(armSubsystem armSub) {
+  private final intakeSubsystem a_intake;
+  public ArmDownIntakeOn(armSubsystem armSub, intakeSubsystem intakeSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     a_armDown = armSub;
-    addRequirements(a_armDown);
+    a_intake = intakeSub;
+    addRequirements(a_armDown, a_intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    a_armDown.intakeDown();
+    new ArmControlDown(a_armDown);
+    a_intake.intakeRun(-SpeedConstants.aRollerSpeed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    a_armDown.intakeArmStop();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return a_armDown.getstatusDown() == false;
+    return a_armDown.getstatusDown() == true;
   }
 }

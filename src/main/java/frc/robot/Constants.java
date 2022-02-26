@@ -17,8 +17,16 @@ import edu.wpi.first.wpilibj.XboxController.Button;
  */
 public final class Constants {
     public static final class DriverButtons{
-        public static final int bArmUp = Button.kA.value;
-        public static final int bArmDown = Button.kB.value;
+        public static final int bArmUp = Button.kB.value;
+        public static final int bArmDown = Button.kA.value;
+        public static final int bTransitionRun = Button.kY.value;
+        public static final int bShooterRun = Button.kRightBumper.value;
+        public static final int bIntakeRun = Button.kX.value;
+        public static final int bFlapperRun = Button.kLeftBumper.value;
+        public static final int bLiftRun = Button.kRightBumper.value;
+        public static final int bWinchRun = Button.kLeftBumper.value;
+        public static final int bShooterRunOperator = Button.kY.value;
+        
     }
     
     public static final class DriveConstants{
@@ -45,6 +53,10 @@ public final class Constants {
         public static final double aaVoltSecondsSquaredPerMeter = 0.0201;
 
         public static final double aPDriveVel = 0.913;
+
+        public static final int aAmpLimit = 20;
+        public static final int aTriggerThreshold = 25;
+        public static final double aTriggerTime = 1.0;
     }
 
     public static final class AutoConstants{
@@ -76,16 +88,16 @@ public final class Constants {
         public static final int aOperatorControllerPort = 1;
     }
     public static final class SpeedConstants{
-        public static final double turnSpeed = 0.7;
-        public static final double driveSpeed = 1;
+        public static final double turnSpeed = 0.6;
+        public static double driveSpeed = 0.8;
         public static final double aArmSpeed = 0.5;
-        public static final double aRollerSpeed = 0.5;
+        public static final double aRollerSpeed = 0.7;
         public static final double aTransitionSpeed = 0.5;
-        public static final double aHighShootSpeed = 0.7;
+        public static final double aHighShootSpeed = 0.36;
         public static final double aLowShootSpeed = 0.4;
         public static final double aFlabberSpeed = 0.4;
-        public static final double aLiftSpeed = 0.5;
-        public static final double aWinchSpeed = 0.5;
+        public static final double aLiftSpeed = 0.75;
+        public static final double aWinchSpeed = 1.0;
     }
 
 }
