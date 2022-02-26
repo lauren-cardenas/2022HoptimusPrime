@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.sql.Driver;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.controller.PIDController;
@@ -23,11 +24,14 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.DriverButtons;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.OperatorButtons;
 import frc.robot.Constants.SpeedConstants;
 import frc.robot.commands.ArmControlDown;
 import frc.robot.commands.ArmControlUp;
 //import frc.robot.commands.ArmDownIntakeOn;
 import frc.robot.commands.DriveTimeCommand;
+// import frc.robot.commands.flapperdown;
+// import frc.robot.commands.flapperup;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.driveSubsystem;
 import frc.robot.subsystems.flapperSubsystem;
@@ -39,6 +43,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -66,6 +71,7 @@ public class RobotContainer {
       AutoConstants.kAutoDriveTime, AutoConstants.kAutoDriveSpeed, a_robotDrive);
 
 
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
    CameraServer.startAutomaticCapture();
@@ -77,7 +83,7 @@ public class RobotContainer {
       new RunCommand(() -> a_robotDrive.arcadeDrive(
         (a_driverController.getRightTriggerAxis()
            - a_driverController.getLeftTriggerAxis())* SpeedConstants.driveSpeed,
-        a_driverController.getLeftX() * SpeedConstants.turnSpeed
+        a_driverController.getLeftX() * SpeedConstants.MturnSpeed
       ), a_robotDrive));
   
       // Must be there
@@ -86,6 +92,8 @@ public class RobotContainer {
 
     //Auto Choices
     autoChooser.setDefaultOption("Simple Auto", m_simpleAuto);
+    // Changing Path weaver 
+    // autoChooser.addOption("M&A_PathWeaver Test",getPathweaverCommand(0));
 
   }
 
@@ -97,100 +105,99 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    //*************driver****************//
-
-    new JoystickButton(a_driverController, DriverButtons.bShooterRun)
-    .whenPressed(() -> a_shooter.shooterRun(SpeedConstants.aHighShootSpeed))
-    .whenReleased(() -> a_shooter.shooterRun(0.0));
-    
+    //*************driver****************//    
     a_transition.setDefaultCommand(
       new RunCommand(() -> a_transition.transitionRun(-a_driverController.getRightY()),a_transition));
 
-    new JoystickButton(a_driverController, DriverButtons.bIntakeRun)
-    .whenPressed(() -> a_rollerIntake.intakeRun(SpeedConstants.aRollerSpeed))
-    .whenReleased(() -> a_rollerIntake.intakeRun(0.0));
-
-    new JoystickButton(a_driverController, DriverButtons.bArmUp)
-    .whenPressed(new ArmControlUp(a_arm))
-    .whenReleased(() -> a_arm.intakeArmStop());
-
-    new JoystickButton(a_driverController, DriverButtons.bArmDown)
-    .whenPressed(new ArmControlDown(a_arm))
-    .whenReleased(() -> a_arm.intakeArmStop());
-
-    // new JoystickButton(a_driverController, DriverButtons.bTransitionRun)
-    // .whenPressed(() -> a_transition.transitionRun(SpeedConstants.aTransitionSpeed))
-    // .whenReleased(() -> a_transition.transitionStop());
-
-    // new JoystickButton(a_driverController, DriverButtons.bFlapperRun)
-    // .whenPressed(() -> a_flabber.flapperRun(SpeedConstants.aFlabberSpeed))
-    // .whenReleased(() -> a_flabber.flapperRun(0.0));
+      new JoystickButton(a_driverController, DriverButtons.bLiftRun)
+      .whenPressed(() -> a_lift.liftRun(-SpeedConstants.aLiftSpeed))
+      .whenReleased(() -> a_lift.liftRun(0.0));
+  
+      new JoystickButton(a_driverController, DriverButtons.bWinchRun)
+      .whenPressed(() -> a_lift.winchRun(-SpeedConstants.aWinchSpeed))
+      .whenReleased(() -> a_lift.winchRun(0.0));
+    
 
     //*************operator****************//
-    new JoystickButton(a_operatorController, DriverButtons.bShooterRunOperator)
+
+    //Shooter (High)
+    new POVButton(a_operatorController, 0)
     .whenPressed(() -> a_shooter.shooterRun(SpeedConstants.aHighShootSpeed))
     .whenReleased(() -> a_shooter.shooterRun(0.0));
 
-    new JoystickButton(a_operatorController, DriverButtons.bIntakeRun)
+    //Shooter (Low)
+    new POVButton(a_operatorController, 180)
+    .whenPressed(() -> a_shooter.shooterRun(SpeedConstants.aLowShootSpeed))
+    .whenReleased(() -> a_shooter.shooterRun(0.0));
+
+    new JoystickButton(a_operatorController, OperatorButtons.bIntakeRun)
     .whenPressed(() -> a_rollerIntake.intakeRun(SpeedConstants.aRollerSpeed))
     .whenReleased(() -> a_rollerIntake.intakeRun(0.0));
 
-    new JoystickButton(a_operatorController, DriverButtons.bArmUp)
+    new JoystickButton(a_operatorController, OperatorButtons.bArmUp)
     .whenPressed(new ArmControlUp(a_arm))
     .whenReleased(() -> a_arm.intakeArmStop());
 
-    new JoystickButton(a_operatorController, DriverButtons.bArmDown)
+    new JoystickButton(a_operatorController, OperatorButtons.bArmDown)
     .whenPressed(new ArmControlDown(a_arm))
     .whenReleased(() -> a_arm.intakeArmStop());
 
-    new JoystickButton(a_operatorController, DriverButtons.bLiftRun)
-    .whenPressed(() -> a_lift.liftRun(-SpeedConstants.aLiftSpeed))
-    .whenReleased(() -> a_lift.liftRun(0.0));
+    new JoystickButton(a_operatorController, OperatorButtons.bFlapperdown)
+    .whenPressed(() -> a_flabber.flapperRun(SpeedConstants.aFlabberSpeed))
+    .whenReleased(() -> a_flabber.flapperRun(0.0));
 
-    new JoystickButton(a_operatorController, DriverButtons.bWinchRun)
-    .whenPressed(() -> a_lift.winchRun(-SpeedConstants.aWinchSpeed))
-    .whenReleased(() -> a_lift.winchRun(0.0));
+    new JoystickButton(a_operatorController, OperatorButtons.bFlapperup)
+    .whenPressed(() -> a_flabber.flapperRun(-SpeedConstants.aFlabberSpeed))
+    .whenReleased(() -> a_flabber.flapperRun(0.0));
+
+    // new JoystickButton(a_operatorController, OperatorButtons.bFlapperdown)
+    // .whenPressed(new flapperdown(a_flabber))
+    // .whenReleased(() -> a_flabber.flapperRun(0.0));
+
+    // new JoystickButton(a_operatorController, OperatorButtons.bFlapperup)
+    // .whenPressed(new flapperup(a_flabber))
+    // .whenReleased(() -> a_flabber.flapperRun(0.0));
 
     a_transition.setDefaultCommand(
       new RunCommand(() -> a_transition.transitionRun(-a_driverController.getRightY()),a_transition));
   }
-  public Command getPathweaverCommand(int json){
+  // public Command getPathweaverCommand(int json){
 
-    String[] trajectoryJSON =
-    {"threeBall.wpilib.json",
-    ""};
+  //   String[] trajectoryJSON =
+  //   {"threeBall.wpilib.json"
+  //   };
 
-    Trajectory trajectory = new Trajectory();
+  //   Trajectory trajectory = new Trajectory();
 
-    try{
-        Path pathTrajectory = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON[json]);
-        trajectory = TrajectoryUtil.fromPathweaverJson(pathTrajectory);
-    } catch (IOException ex) {
-      DriverStation.reportError("Unable to open one or more trajectories",  ex.getStackTrace());
-    }
+  //   try{
+  //       Path pathTrajectory = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON[json]);
+  //       trajectory = TrajectoryUtil.fromPathweaverJson(pathTrajectory);
+  //   } catch (IOException ex) {
+  //     DriverStation.reportError("Unable to open one or more trajectories",  ex.getStackTrace());
+  //   }
 
-    RamseteCommand ramseteCommand =
-        new RamseteCommand(
-            trajectory,
-            a_robotDrive::getPose,
-            new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
-            new SimpleMotorFeedforward(
-                DriveConstants.asVolts,
-                DriveConstants.avVoltSecondsPerMeter,
-                DriveConstants.aaVoltSecondsSquaredPerMeter),
-            DriveConstants.kDriveKinematics,
-            a_robotDrive::getWheelSpeeds,
-            new PIDController(DriveConstants.aPDriveVel, 0, 0),
-            new PIDController(DriveConstants.aPDriveVel, 0, 0),
-            // RamseteCommand passes volts to the callback
-            a_robotDrive::tankDriveVolts,
-            a_robotDrive);
+  //   RamseteCommand ramseteCommand =
+  //       new RamseteCommand(
+  //           trajectory,
+  //           a_robotDrive::getPose,
+  //           new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
+  //           new SimpleMotorFeedforward(
+  //               DriveConstants.asVolts,
+  //               DriveConstants.avVoltSecondsPerMeter,
+  //               DriveConstants.aaVoltSecondsSquaredPerMeter),
+  //           DriveConstants.kDriveKinematics,
+  //           a_robotDrive::getWheelSpeeds,
+  //           new PIDController(DriveConstants.aPDriveVel, 0, 0),
+  //           new PIDController(DriveConstants.aPDriveVel, 0, 0),
+  //           // RamseteCommand passes volts to the callback
+  //           a_robotDrive::tankDriveVolts,
+  //           a_robotDrive);
 
-    //reset odometry
-    a_robotDrive.resetOdometry(trajectory.getInitialPose());
+  //   //reset odometry
+  //   a_robotDrive.resetOdometry(trajectory.getInitialPose());
 
-    return ramseteCommand.andThen(() -> a_robotDrive.tankDriveVolts(0, 0));
-  }
+  //   return ramseteCommand.andThen(() -> a_robotDrive.tankDriveVolts(0, 0));
+  // }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

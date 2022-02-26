@@ -6,7 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.armSubsystem;
-import frc.robot.subsystems.intakeSubsystem;
+//import frc.robot.subsystems.intakeSubsystem;
 
 public class ArmControlDown extends CommandBase {
   /** Creates a new ArmControlDown. */

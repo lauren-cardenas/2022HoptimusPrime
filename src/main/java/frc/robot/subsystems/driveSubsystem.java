@@ -64,7 +64,7 @@ public class driveSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     a_odometry.update(
-      //m_gyro.getRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
+      //a_gyro.getRotation2d(), a_leftEncoder.getDistance(), m_rightEncoder.getDistance());
       a_gyro.getRotation2d(), a_frontLeft.getSelectedSensorPosition(), a_frontRight.getSelectedSensorPosition());
   }
 
