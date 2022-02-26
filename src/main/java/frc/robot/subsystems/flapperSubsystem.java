@@ -14,8 +14,8 @@ public class flapperSubsystem extends SubsystemBase {
   /** Creates a new flapperSubsystem. */
   WPI_VictorSPX a_flapper;
 
-  // private DigitalInput flapSwitchDown = new DigitalInput(MechConstants.aFlapDown);
-  // private DigitalInput flapSwitchUp = new DigitalInput(MechConstants.aFlapUp);
+  private DigitalInput flapSwitchDown = new DigitalInput(MechConstants.aFlapDown);
+  private DigitalInput flapSwitchUp = new DigitalInput(MechConstants.aFlapUp);
 
 
   public flapperSubsystem() {
@@ -31,11 +31,11 @@ public class flapperSubsystem extends SubsystemBase {
     a_flapper.set(speed);
   }
 
-  // public boolean getstatusDownFlap(){
-  //   return flapSwitchDown.get();
-  // }
-  // public boolean getstatusUpFlap(){
-  //   return flapSwitchUp.get();
-  // }
+  public boolean getstatusDownFlap(){
+    return flapSwitchDown.get();
+  }
+  public boolean getstatusUpFlap(){
+    return flapSwitchUp.get();
+  }
 
 }

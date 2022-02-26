@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MechConstants;
 
@@ -13,6 +14,8 @@ public class liftSubsystem extends SubsystemBase {
   /** Creates a new liftSubsystem. */
   WPI_VictorSPX a_lift;
   WPI_VictorSPX a_winch;
+
+  private final DigitalInput liftSwitch = new DigitalInput(MechConstants.aLiftSwitchPort);
 
   public liftSubsystem() {
     a_lift = new WPI_VictorSPX(MechConstants.aLiftPort);
@@ -30,5 +33,8 @@ public class liftSubsystem extends SubsystemBase {
 
   public void winchRun(double speed){
     a_winch.set(speed);
+  }
+    public boolean getstatusLift(){
+    return liftSwitch.get();
   }
 }

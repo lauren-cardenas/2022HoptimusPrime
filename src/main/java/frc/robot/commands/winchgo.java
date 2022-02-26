@@ -6,15 +6,15 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.SpeedConstants;
-import frc.robot.subsystems.flapperSubsystem;
+import frc.robot.subsystems.liftSubsystem;
 
-public class flapperdown extends CommandBase {
-  /** Creates a new flapperdown. */
-  private final flapperSubsystem M_flapperDown;
-  public flapperdown(flapperSubsystem flappersub) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    M_flapperDown = flappersub;
-    addRequirements(M_flapperDown);
+public class winchgo extends CommandBase {
+  private final liftSubsystem M_winch;
+
+  /** Creates a new winchgo. */
+  public winchgo(liftSubsystem winchsub) {
+    M_winch = winchsub;
+    addRequirements(M_winch);
   }
 
   // Called when the command is initially scheduled.
@@ -24,18 +24,18 @@ public class flapperdown extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    M_flapperDown.flapperRun(-SpeedConstants.aFlabberSpeed);
+    M_winch.winchRun(SpeedConstants.aWinchSpeed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    M_flapperDown.flapperRun(0.0);
+    M_winch.winchRun(0.0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return M_flapperDown.getstatusDownFlap() == false;
+    return M_winch.getstatusLift() == false;
   }
 }

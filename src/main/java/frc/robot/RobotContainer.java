@@ -30,9 +30,8 @@ import frc.robot.commands.ArmControlDown;
 import frc.robot.commands.ArmControlUp;
 //import frc.robot.commands.ArmDownIntakeOn;
 import frc.robot.commands.DriveTimeCommand;
-// import frc.robot.commands.LiftUp;
-// import frc.robot.commands.flapperdown;
-// import frc.robot.commands.flapperup;
+import frc.robot.commands.flapperdown;
+import frc.robot.commands.flapperup;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.driveSubsystem;
 import frc.robot.subsystems.flapperSubsystem;
@@ -147,21 +146,21 @@ public class RobotContainer {
     .whenPressed(new ArmControlDown(a_arm))
     .whenReleased(() -> a_arm.intakeArmStop());
 
-    new JoystickButton(a_operatorController, OperatorButtons.bFlapperdown)
+    // new JoystickButton(a_operatorController, OperatorButtons.bFlapperdown)
+    // .whenPressed(() -> a_flabber.flapperRun(SpeedConstants.aFlabberSpeed))
+    // .whenReleased(() -> a_flabber.flapperRun(0.0));
+
+    new JoystickButton(a_operatorController, OperatorButtons.bFlapperup)
     .whenPressed(() -> a_flabber.flapperRun(SpeedConstants.aFlabberSpeed))
     .whenReleased(() -> a_flabber.flapperRun(0.0));
 
-    new JoystickButton(a_operatorController, OperatorButtons.bFlapperup)
-    .whenPressed(() -> a_flabber.flapperRun(-SpeedConstants.aFlabberSpeed))
+    new JoystickButton(a_operatorController, OperatorButtons.bFlapperdown)
+    .whenPressed(new flapperdown(a_flabber))
     .whenReleased(() -> a_flabber.flapperRun(0.0));
 
-    // new JoystickButton(a_operatorController, OperatorButtons.bFlapperdown)
-    // .whenPressed(new flapperdown(a_flabber))
-    // .whenReleased(() -> a_flabber.flapperRun(0.0));
-
-    // new JoystickButton(a_operatorController, OperatorButtons.bFlapperup)
-    // .whenPressed(new flapperup(a_flabber))
-    // .whenReleased(() -> a_flabber.flapperRun(0.0));
+    new JoystickButton(a_operatorController, OperatorButtons.bFlapperup)
+    .whenPressed(new flapperup(a_flabber))
+    .whenReleased(() -> a_flabber.flapperRun(0.0));
 
     a_transition.setDefaultCommand(
       new RunCommand(() -> a_transition.transitionRun(-a_driverController.getRightY()),a_transition));
