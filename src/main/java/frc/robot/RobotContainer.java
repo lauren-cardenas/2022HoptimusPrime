@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
@@ -30,8 +31,10 @@ import frc.robot.commands.ArmControlDown;
 import frc.robot.commands.ArmControlUp;
 //import frc.robot.commands.ArmDownIntakeOn;
 import frc.robot.commands.DriveTimeCommand;
+import frc.robot.commands.ShootThenDrive;
 import frc.robot.commands.flapperdown;
 import frc.robot.commands.flapperup;
+import frc.robot.commands.winchgo;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.driveSubsystem;
 import frc.robot.subsystems.flapperSubsystem;
@@ -70,6 +73,9 @@ public class RobotContainer {
     new DriveTimeCommand(
       AutoConstants.kAutoDriveTime, AutoConstants.kAutoDriveSpeed, a_robotDrive);
 
+  private final Command m_ShootThenDrive = 
+    new ShootThenDrive(a_robotDrive, a_shooter, a_transition, 2, SpeedConstants.aHighShootSpeed, 3);
+
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -92,6 +98,10 @@ public class RobotContainer {
 
     //Auto Choices
     autoChooser.setDefaultOption("Simple Auto", m_simpleAuto);
+    autoChooser.setDefaultOption("shoot then drive", m_ShootThenDrive);
+
+    Shuffleboard.getTab("Autonomous").add(autoChooser);
+
     // Changing Path weaver 
     // autoChooser.addOption("M&A_PathWeaver Test",getPathweaverCommand(0));
 
@@ -113,13 +123,13 @@ public class RobotContainer {
       .whenPressed(() -> a_lift.liftRun(-SpeedConstants.aLiftSpeed))
       .whenReleased(() -> a_lift.liftRun(0.0));
   
-      new JoystickButton(a_driverController, DriverButtons.bWinchRun)
-      .whenPressed(() -> a_lift.winchRun(-SpeedConstants.aWinchSpeed))
-      .whenReleased(() -> a_lift.winchRun(0.0));
+      // new JoystickButton(a_driverController, DriverButtons.bWinchRun)
+      // .whenPressed(() -> a_lift.winchRun(-SpeedConstants.aWinchSpeed))
+      // .whenReleased(() -> a_lift.winchRun(0.0));
 
-      // new JoystickButton(a_driverController, DriverButtons.bLiftRun)
-      // .whenPressed(new LiftUp(a_lift))
-      // .whenReleased(() -> a_lift.liftRun(0.0));
+      new JoystickButton(a_driverController, DriverButtons.bWinchRun)
+      .whenPressed(new winchgo(a_lift))
+      .whenReleased(() -> a_lift.liftRun(0.0));
     
 
     //*************operator****************//
@@ -150,9 +160,9 @@ public class RobotContainer {
     // .whenPressed(() -> a_flabber.flapperRun(SpeedConstants.aFlabberSpeed))
     // .whenReleased(() -> a_flabber.flapperRun(0.0));
 
-    new JoystickButton(a_operatorController, OperatorButtons.bFlapperup)
-    .whenPressed(() -> a_flabber.flapperRun(SpeedConstants.aFlabberSpeed))
-    .whenReleased(() -> a_flabber.flapperRun(0.0));
+    // new JoystickButton(a_operatorController, OperatorButtons.bFlapperup)
+    // .whenPressed(() -> a_flabber.flapperRun(SpeedConstants.aFlabberSpeed))
+    // .whenReleased(() -> a_flabber.flapperRun(0.0));
 
     new JoystickButton(a_operatorController, OperatorButtons.bFlapperdown)
     .whenPressed(new flapperdown(a_flabber))

@@ -24,7 +24,7 @@ public class winchgo extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    M_winch.winchRun(SpeedConstants.aWinchSpeed);
+    M_winch.winchRun(-SpeedConstants.aWinchSpeed);
   }
 
   // Called once the command ends or is interrupted.

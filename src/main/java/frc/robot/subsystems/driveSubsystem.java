@@ -126,7 +126,7 @@ public class driveSubsystem extends SubsystemBase {
   }
   
   private double getRightWheelPosition(){
-    return (a_frontRight.getSelectedSensorPosition() * DriveConstants.aWheelDiameterMeters * Math.PI
+    return (-a_frontRight.getSelectedSensorPosition() * DriveConstants.aWheelDiameterMeters * Math.PI
      / DriveConstants.aEncoderCPR) / DriveConstants.aGearRatio;
   }
 

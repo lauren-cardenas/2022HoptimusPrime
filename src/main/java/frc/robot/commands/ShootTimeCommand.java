@@ -37,14 +37,14 @@ public class ShootTimeCommand extends CommandBase {
     m_timer.reset();
     m_timer.start();
     m_shoot.shooterRun(m_shootSpeed);
-    m_transition.transitionRun(SpeedConstants.aTransitionSpeed);
+    m_transition.transitionRun(SpeedConstants.aTransitionSpeed-0.06);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     m_shoot.shooterRun(m_shootSpeed);
-    m_transition.transitionRun(SpeedConstants.aTransitionSpeed);
+    m_transition.transitionRun(SpeedConstants.aTransitionSpeed-0.06);
   }
 
   // Called once the command ends or is interrupted.
