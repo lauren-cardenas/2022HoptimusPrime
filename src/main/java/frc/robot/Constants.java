@@ -36,7 +36,7 @@ public final class Constants {
         public static final int aRightDrivePort2 = 5;
 
         public static final double aTrackwidthMeters = 0.24; //1.1;
-        public static final DifferentialDriveKinematics aDriveKinematics =
+        public static final DifferentialDriveKinematics kDriveKinematics =
             new DifferentialDriveKinematics(aTrackwidthMeters);
 
         public static final double aGearRatio = 10.93;
@@ -62,6 +62,13 @@ public final class Constants {
     public static final class AutoConstants{
         public static final double kAutoDriveTime = 3;
         public static final double kAutoDriveSpeed = -0.5;
+
+        public static final double kMaxSpeedMetersPerSecond = 3;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 6;
+    
+        // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
+        public static final double kRamseteB = 2;
+        public static final double kRamseteZeta = 0.7;
     }
 
     public static final class MechConstants{
@@ -89,7 +96,7 @@ public final class Constants {
     }
     public static final class SpeedConstants{
         public static final double turnSpeed = 0.6;
-        public static double driveSpeed = 0.8;
+        public static double driveSpeed = 0.9;
         public static final double aArmSpeed = 0.5;
         public static final double aRollerSpeed = 0.7;
         public static final double aTransitionSpeed = 0.5;
