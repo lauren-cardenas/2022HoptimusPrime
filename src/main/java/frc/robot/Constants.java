@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -50,11 +49,11 @@ public final class Constants {
             aWheelDiameterMeters * Math.PI /
                 (aGearRatio * aEncoderCPR);
 
-        public static final double asVolts = 0.60903;
-        public static final double avVoltSecondsPerMeter = 0.062107;
-        public static final double aaVoltSecondsSquaredPerMeter = 0.0087418;
+        public static final double asVolts = 0.60028; //0.60903;
+        public static final double avVoltSecondsPerMeter = 2.4515; //0.062107;
+        public static final double aaVoltSecondsSquaredPerMeter = 0.3431; //0.0087418;
 
-        public static final double aPDriveVel = 0.084576;
+        public static final double aPDriveVel = 0.0044096; //0.084576;
 
         public static final int aAmpLimit = 30;
         public static final int aTriggerThreshold = 25;
@@ -92,6 +91,7 @@ public final class Constants {
         public static final int aArmUpSwitch = 1;
         public static final int aFlapDown = 2;
         public static final int aFlapUp = 3;
+        public static final int aLiftSwitchPort = 4;
     }
 
     public static final class OIConstants {

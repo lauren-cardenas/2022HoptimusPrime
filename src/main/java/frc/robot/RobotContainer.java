@@ -30,6 +30,7 @@ import frc.robot.commands.ArmControlDown;
 import frc.robot.commands.ArmControlUp;
 //import frc.robot.commands.ArmDownIntakeOn;
 import frc.robot.commands.DriveTimeCommand;
+// import frc.robot.commands.LiftUp;
 // import frc.robot.commands.flapperdown;
 // import frc.robot.commands.flapperup;
 import frc.robot.subsystems.armSubsystem;
@@ -116,6 +117,10 @@ public class RobotContainer {
       new JoystickButton(a_driverController, DriverButtons.bWinchRun)
       .whenPressed(() -> a_lift.winchRun(-SpeedConstants.aWinchSpeed))
       .whenReleased(() -> a_lift.winchRun(0.0));
+
+      // new JoystickButton(a_driverController, DriverButtons.bLiftRun)
+      // .whenPressed(new LiftUp(a_lift))
+      // .whenReleased(() -> a_lift.liftRun(0.0));
     
 
     //*************operator****************//
@@ -161,43 +166,43 @@ public class RobotContainer {
     a_transition.setDefaultCommand(
       new RunCommand(() -> a_transition.transitionRun(-a_driverController.getRightY()),a_transition));
   }
-  // public Command getPathweaverCommand(int json){
+  public Command getPathweaverCommand(int json){
 
-  //   String[] trajectoryJSON =
-  //   {"threeBall.wpilib.json"
-  //   };
+    String[] trajectoryJSON =
+    {"threeBall.wpilib.json"
+    };
 
-  //   Trajectory trajectory = new Trajectory();
+    Trajectory trajectory = new Trajectory();
 
-  //   try{
-  //       Path pathTrajectory = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON[json]);
-  //       trajectory = TrajectoryUtil.fromPathweaverJson(pathTrajectory);
-  //   } catch (IOException ex) {
-  //     DriverStation.reportError("Unable to open one or more trajectories",  ex.getStackTrace());
-  //   }
+    try{
+        Path pathTrajectory = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON[json]);
+        trajectory = TrajectoryUtil.fromPathweaverJson(pathTrajectory);
+    } catch (IOException ex) {
+      DriverStation.reportError("Unable to open one or more trajectories",  ex.getStackTrace());
+    }
 
-  //   RamseteCommand ramseteCommand =
-  //       new RamseteCommand(
-  //           trajectory,
-  //           a_robotDrive::getPose,
-  //           new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
-  //           new SimpleMotorFeedforward(
-  //               DriveConstants.asVolts,
-  //               DriveConstants.avVoltSecondsPerMeter,
-  //               DriveConstants.aaVoltSecondsSquaredPerMeter),
-  //           DriveConstants.kDriveKinematics,
-  //           a_robotDrive::getWheelSpeeds,
-  //           new PIDController(DriveConstants.aPDriveVel, 0, 0),
-  //           new PIDController(DriveConstants.aPDriveVel, 0, 0),
-  //           // RamseteCommand passes volts to the callback
-  //           a_robotDrive::tankDriveVolts,
-  //           a_robotDrive);
+    RamseteCommand ramseteCommand =
+        new RamseteCommand(
+            trajectory,
+            a_robotDrive::getPose,
+            new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
+            new SimpleMotorFeedforward(
+                DriveConstants.asVolts,
+                DriveConstants.avVoltSecondsPerMeter,
+                DriveConstants.aaVoltSecondsSquaredPerMeter),
+            DriveConstants.kDriveKinematics,
+            a_robotDrive::getWheelSpeeds,
+            new PIDController(DriveConstants.aPDriveVel, 0, 0),
+            new PIDController(DriveConstants.aPDriveVel, 0, 0),
+            // RamseteCommand passes volts to the callback
+            a_robotDrive::tankDriveVolts,
+            a_robotDrive);
 
-  //   //reset odometry
-  //   a_robotDrive.resetOdometry(trajectory.getInitialPose());
+    //reset odometry
+    a_robotDrive.resetOdometry(trajectory.getInitialPose());
 
-  //   return ramseteCommand.andThen(() -> a_robotDrive.tankDriveVolts(0, 0));
-  // }
+    return ramseteCommand.andThen(() -> a_robotDrive.tankDriveVolts(0, 0));
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
