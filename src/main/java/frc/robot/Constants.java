@@ -54,7 +54,7 @@ public final class Constants {
 
         public static final double aPDriveVel = 0.913;
 
-        public static final int aAmpLimit = 20;
+        public static final int aAmpLimit = 30;
         public static final int aTriggerThreshold = 25;
         public static final double aTriggerTime = 1.0;
     }

@@ -40,14 +40,14 @@ public class driveSubsystem extends SubsystemBase {
     a_backRight.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,0,0);
 
     a_frontLeft.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit/2, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
-    a_frontRight.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 10, 15, 0.5));
-    a_backLeft.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 10, 15, 0.5));
-    a_backRight.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 10, 15, 0.5));
+    a_frontRight.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit/2, 15, 0.5));
+    a_backLeft.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit/2, 15, 0.5));
+    a_backRight.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit/2, 15, 0.5));
 
-    a_frontLeft.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 25, 1.0));
-    a_frontRight.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 25, 1.0));
-    a_backLeft.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 25, 1.0));
-    a_backRight.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 25, 1.0));
+    a_frontLeft.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, 25, 1.0));
+    a_frontRight.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, 25, 1.0));
+    a_backLeft.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, 25, 1.0));
+    a_backRight.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, 25, 1.0));
   }
 
   @Override
