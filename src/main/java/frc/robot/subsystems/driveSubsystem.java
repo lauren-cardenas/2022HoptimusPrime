@@ -65,7 +65,7 @@ public class driveSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     a_odometry.update(
       //a_gyro.getRotation2d(), a_leftEncoder.getDistance(), m_rightEncoder.getDistance());
-      a_gyro.getRotation2d(), a_frontLeft.getSelectedSensorPosition(), a_frontRight.getSelectedSensorPosition());
+      a_gyro.getRotation2d(), getLeftWheelPosition(), getRightWheelPosition());
   }
 
   public void arcadeDrive(double fwd, double rot) {
@@ -74,11 +74,11 @@ public class driveSubsystem extends SubsystemBase {
   }
 
   private double getLeftWheelSpeed(){
-    return a_frontLeft.getSelectedSensorVelocity() * DriveConstants.Conversion;
+    return a_frontLeft.getSelectedSensorVelocity() * DriveConstants.aEncoderDistancePerPulse;
   }
 
   private double getRightWheelSpeed(){
-    return a_frontRight.getSelectedSensorVelocity() * DriveConstants.Conversion;
+    return a_frontRight.getSelectedSensorVelocity() * DriveConstants.aEncoderDistancePerPulse;
   }
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(getLeftWheelSpeed(), getRightWheelSpeed());
@@ -100,7 +100,7 @@ public class driveSubsystem extends SubsystemBase {
   }
   public void tankDriveVolts(double leftVolts, double rightVolts) {
     a_leftMotors.setVoltage(leftVolts);
-    a_rightMotors.setVoltage(-rightVolts);
+    a_rightMotors.setVoltage(rightVolts);
     a_drive.feed();
   }
 
@@ -118,6 +118,8 @@ public class driveSubsystem extends SubsystemBase {
   public void displayEncoderValues(){
     SmartDashboard.putNumber("Right Data", getRightWheelPosition());
     SmartDashboard.putNumber("Left Data", getLeftWheelPosition());
+    SmartDashboard.putNumber("Left Speed", getLeftWheelSpeed());
+    SmartDashboard.putNumber("Right Speed", getRightWheelSpeed());
   }
 
   private double getLeftWheelPosition(){

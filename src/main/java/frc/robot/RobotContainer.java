@@ -104,7 +104,10 @@ public class RobotContainer {
     autoChooser.setDefaultOption("shoot then drive", m_ShootThenDrive);
     autoChooser.setDefaultOption("Shoot Low", a_ShootLowThenDrive);
 
-    autoChooser.addOption("Three Balls", getPathweaverCommand(0));
+    //autoChooser.addOption("Three Balls", getPathweaverCommand(0));
+    //autoChooser.addOption("S Path", getPathweaverCommand(1));
+    autoChooser.addOption("Straight", getPathweaverCommand(0));
+
     Shuffleboard.getTab("Autonomous").add(autoChooser);
 
     // Changing Path weaver 
@@ -190,7 +193,9 @@ public class RobotContainer {
   public Command getPathweaverCommand(int json){
 
     String[] trajectoryJSON =
-    {"output/threeBall.wpilib.json"
+    {//"output/threeBall.wpilib.json",
+      //"output/sPath.wpilib.json",
+      "output/Straight.wpilib.json"
     };
 
     Trajectory trajectory = new Trajectory();
