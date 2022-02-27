@@ -6,7 +6,6 @@ package frc.robot;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.sql.Driver;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.controller.PIDController;
@@ -74,8 +73,12 @@ public class RobotContainer {
       AutoConstants.kAutoDriveTime, AutoConstants.kAutoDriveSpeed, a_robotDrive);
 
   private final Command m_ShootThenDrive = 
-    new ShootThenDrive(a_robotDrive, a_shooter, a_transition, 2, SpeedConstants.aHighShootSpeed, 3);
-
+    new ShootThenDrive(a_robotDrive, a_shooter, a_transition, AutoConstants.shootHighDistance, SpeedConstants.aHighShootSpeed, 3, a_flabber, false, 1);
+  
+    
+  private final Command a_ShootLowThenDrive = 
+    new ShootThenDrive(a_robotDrive, a_shooter, a_transition, AutoConstants.shootLowDistance, SpeedConstants.aLowShootSpeed, AutoConstants.transitionTime, a_flabber, true, -1);
+  
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -99,7 +102,9 @@ public class RobotContainer {
     //Auto Choices
     autoChooser.setDefaultOption("Simple Auto", m_simpleAuto);
     autoChooser.setDefaultOption("shoot then drive", m_ShootThenDrive);
+    autoChooser.setDefaultOption("Shoot Low", a_ShootLowThenDrive);
 
+    autoChooser.addOption("Three Balls", getPathweaverCommand(0));
     Shuffleboard.getTab("Autonomous").add(autoChooser);
 
     // Changing Path weaver 
@@ -117,7 +122,7 @@ public class RobotContainer {
 
     //*************driver****************//    
     a_transition.setDefaultCommand(
-      new RunCommand(() -> a_transition.transitionRun(-a_driverController.getRightY()),a_transition));
+      new RunCommand(() -> a_transition.transitionRun((-a_driverController.getRightY()+(-a_operatorController.getRightY()))*SpeedConstants.aTransitionSpeed),a_transition));
 
       new JoystickButton(a_driverController, DriverButtons.bLiftRun)
       .whenPressed(() -> a_lift.liftRun(-SpeedConstants.aLiftSpeed))
@@ -129,7 +134,15 @@ public class RobotContainer {
 
       new JoystickButton(a_driverController, DriverButtons.bWinchRun)
       .whenPressed(new winchgo(a_lift))
-      .whenReleased(() -> a_lift.liftRun(0.0));
+      .whenReleased(() -> a_lift.winchRun(0.0));
+
+      // new JoystickButton(a_driverController, Button.kY.value)
+      // .whenPressed(() -> a_lift.liftRun(SpeedConstants.aLiftSpeed))
+      // .whenReleased(() -> a_lift.liftRun(0.0));
+
+      new JoystickButton(a_driverController, DriverButtons.bWinchBack)
+      .whenPressed(() -> a_lift.winchRun(SpeedConstants.aWinchSpeed))
+      .whenReleased(() -> a_lift.winchRun(0.0));
     
 
     //*************operator****************//
@@ -172,13 +185,12 @@ public class RobotContainer {
     .whenPressed(new flapperup(a_flabber))
     .whenReleased(() -> a_flabber.flapperRun(0.0));
 
-    a_transition.setDefaultCommand(
-      new RunCommand(() -> a_transition.transitionRun(-a_driverController.getRightY()),a_transition));
+  //  ?w RunCommand(() -> a_transition.transitionRun(-a_operatorCo?ntroller.getRightY()*SpeedConstants.aTransitionSpeed),a_transition));
   }
   public Command getPathweaverCommand(int json){
 
     String[] trajectoryJSON =
-    {"threeBall.wpilib.json"
+    {"output/threeBall.wpilib.json"
     };
 
     Trajectory trajectory = new Trajectory();

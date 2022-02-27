@@ -20,6 +20,7 @@ public final class Constants {
         
         public static final int bLiftRun = Button.kA.value;
         public static final int bWinchRun = Button.kB.value;
+        public static final int bWinchBack = Button.kY.value;
 
     }
     public static final class OperatorButtons{
@@ -70,6 +71,9 @@ public final class Constants {
         // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
         public static final double kRamseteB = 2;
         public static final double kRamseteZeta = 0.7;
+        public static final int shootHighDistance = 2;
+        public static final int shootLowDistance = 3;
+        public static final int transitionTime = 3;
     }
 
     public static final class MechConstants{
@@ -103,12 +107,13 @@ public final class Constants {
         public static double driveSpeed = 0.9;
         public static final double aArmSpeed = 0.5;
         public static final double aRollerSpeed = 0.7;
-        public static final double aTransitionSpeed = 0.5;
+        public static final double aTransitionSpeed = 0.75;
         public static final double aHighShootSpeed = 0.36;
         public static final double aLowShootSpeed = 0.25;
         public static final double aFlabberSpeed = 0.25;
         public static final double aLiftSpeed = 0.75;
         public static final double aWinchSpeed = 1.0;
+        public static final double aTransitionSpeedAuto = 1.0;
     }
 
 }
