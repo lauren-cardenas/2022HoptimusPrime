@@ -12,7 +12,9 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -31,6 +33,7 @@ import frc.robot.commands.ArmControlUp;
 //import frc.robot.commands.ArmDownIntakeOn;
 import frc.robot.commands.DriveTimeCommand;
 import frc.robot.commands.ShootThenDrive;
+import frc.robot.commands.TwoBallsAuto;
 import frc.robot.commands.flapperdown;
 import frc.robot.commands.flapperup;
 import frc.robot.commands.winchgo;
@@ -88,12 +91,22 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
+    // Driver Controller Driving
     a_robotDrive.setDefaultCommand(
       new RunCommand(() -> a_robotDrive.arcadeDrive(
         (a_driverController.getRightTriggerAxis()
            - a_driverController.getLeftTriggerAxis())* SpeedConstants.driveSpeed,
         a_driverController.getLeftX() * SpeedConstants.MturnSpeed
       ), a_robotDrive));
+
+     /* // Operator Controller Driving 
+      a_robotDrive.setDefaultCommand(
+        new RunCommand(() -> a_robotDrive.arcadeDrive(
+          (a_operatorController.getRightTriggerAxis()
+             - a_operatorController.getLeftTriggerAxis())* SpeedConstants.driveSpeed,
+          a_operatorController.getLeftX() * SpeedConstants.MturnSpeed
+        ), a_robotDrive));
+      */
   
       // Must be there
       SmartDashboard.putData(a_robotDrive);
@@ -101,12 +114,14 @@ public class RobotContainer {
 
     //Auto Choices
     autoChooser.setDefaultOption("Simple Auto", m_simpleAuto);
-    autoChooser.setDefaultOption("shoot then drive", m_ShootThenDrive);
-    autoChooser.setDefaultOption("Shoot Low", a_ShootLowThenDrive);
+    autoChooser.addOption("shoot then drive", m_ShootThenDrive);
+    autoChooser.addOption("Shoot Low", a_ShootLowThenDrive);
 
+
+    //autoChooser.addOption("ShootThenPathweaver", new TwoBallsAuto(a_robotDrive, a_shooter, a_transition, AutoConstants.shootHighDistance, SpeedConstants.aHighShootSpeed, AutoConstants.transitionTime, a_flabber, false, 1));
     //autoChooser.addOption("Three Balls", getPathweaverCommand(0));
-    //autoChooser.addOption("S Path", getPathweaverCommand(1));
-    autoChooser.addOption("Straight", getPathweaverCommand(0));
+    // autoChooser.addOption("Two Ball", getPathweaverCommand(1));
+    //autoChooser.addOption("Straight", getPathweaverCommand(0));
 
     Shuffleboard.getTab("Autonomous").add(autoChooser);
 
@@ -190,45 +205,67 @@ public class RobotContainer {
 
   //  ?w RunCommand(() -> a_transition.transitionRun(-a_operatorCo?ntroller.getRightY()*SpeedConstants.aTransitionSpeed),a_transition));
   }
-  public Command getPathweaverCommand(int json){
+//   public Command getPathweaverCommand(int json){
 
-    String[] trajectoryJSON =
-    {//"output/threeBall.wpilib.json",
-      //"output/sPath.wpilib.json",
-      "output/Straight.wpilib.json"
-    };
+//     String[] trajectoryJSON =
+//     {//"output/threeBall.wpilib.json",
+//       //"output/sPath.wpilib.json",
+//       "output/Straight.wpilib.json",
+//       "output/twoBall.wpilib.json"
+//     };
+// /*
+//     // Create a voltage constraint to ensure we don't accelerate too fast
+//     var autoVoltageConstraint =
+//         new DifferentialDriveVoltageConstraint(
+//             new SimpleMotorFeedforward(
+//                 DriveConstants.asVolts,
+//                 DriveConstants.avVoltSecondsPerMeter,
+//                 DriveConstants.aaVoltSecondsSquaredPerMeter),
+//             DriveConstants.kDriveKinematics,
+//             10);
 
-    Trajectory trajectory = new Trajectory();
+//     // Create config for trajectory
+//     TrajectoryConfig config =
+//         new TrajectoryConfig(
+//                 AutoConstants.kMaxSpeedMetersPerSecond,
+//                 AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+//             // Add kinematics to ensure max speed is actually obeyed
+//             .setKinematics(DriveConstants.kDriveKinematics)
+//             // Apply the voltage constraint
+//             .addConstraint(autoVoltageConstraint);
+// */
 
-    try{
-        Path pathTrajectory = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON[json]);
-        trajectory = TrajectoryUtil.fromPathweaverJson(pathTrajectory);
-    } catch (IOException ex) {
-      DriverStation.reportError("Unable to open one or more trajectories",  ex.getStackTrace());
-    }
+//     Trajectory trajectory = new Trajectory();
 
-    RamseteCommand ramseteCommand =
-        new RamseteCommand(
-            trajectory,
-            a_robotDrive::getPose,
-            new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
-            new SimpleMotorFeedforward(
-                DriveConstants.asVolts,
-                DriveConstants.avVoltSecondsPerMeter,
-                DriveConstants.aaVoltSecondsSquaredPerMeter),
-            DriveConstants.kDriveKinematics,
-            a_robotDrive::getWheelSpeeds,
-            new PIDController(DriveConstants.aPDriveVel, 0, 0),
-            new PIDController(DriveConstants.aPDriveVel, 0, 0),
-            // RamseteCommand passes volts to the callback
-            a_robotDrive::tankDriveVolts,
-            a_robotDrive);
+//     try{
+//         Path pathTrajectory = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON[json]);
+//         trajectory = TrajectoryUtil.fromPathweaverJson(pathTrajectory);
+//     } catch (IOException ex) {
+//       DriverStation.reportError("Unable to open one or more trajectories",  ex.getStackTrace());
+//     }
 
-    //reset odometry
-    a_robotDrive.resetOdometry(trajectory.getInitialPose());
+//     RamseteCommand ramseteCommand =
+//         new RamseteCommand(
+//             trajectory,
+//             a_robotDrive::getPose,
+//             new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
+//             new SimpleMotorFeedforward(
+//                 DriveConstants.asVolts,
+//                 DriveConstants.avVoltSecondsPerMeter,
+//                 DriveConstants.aaVoltSecondsSquaredPerMeter),
+//             DriveConstants.kDriveKinematics,
+//             a_robotDrive::getWheelSpeeds,
+//             new PIDController(DriveConstants.aPDriveVel, 0, 0),
+//             new PIDController(DriveConstants.aPDriveVel, 0, 0),
+//             // RamseteCommand passes volts to the callback
+//             a_robotDrive::tankDriveVolts,
+//             a_robotDrive);
 
-    return ramseteCommand.andThen(() -> a_robotDrive.tankDriveVolts(0, 0));
-  }
+//     //reset odometry
+//     a_robotDrive.resetOdometry(trajectory.getInitialPose());
+
+//     return ramseteCommand.andThen(() -> a_robotDrive.tankDriveVolts(0, 0));
+//   }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -240,3 +277,20 @@ public class RobotContainer {
     return autoChooser.getSelected();
   }
 }
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+

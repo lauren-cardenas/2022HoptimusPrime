@@ -37,7 +37,7 @@ public final class Constants {
         public static final int aRightDrivePort1 = 4;
         public static final int aRightDrivePort2 = 5;
 
-        public static final double aTrackwidthMeters = 0.24; //1.1;
+        public static final double aTrackwidthMeters = 0.48; //1.1;
         public static final DifferentialDriveKinematics kDriveKinematics =
             new DifferentialDriveKinematics(aTrackwidthMeters);
 
@@ -45,7 +45,9 @@ public final class Constants {
         public static final int aEncoderCPR = 2040;
         public static final double aWheelDiameterMeters = 0.16;
         public static final double aEncoderDistancePerPulse = 
-            (aWheelDiameterMeters * Math.PI) / (double) aEncoderCPR;
+            //(aWheelDiameterMeters * Math.PI) / (double) aEncoderCPR;
+            (aWheelDiameterMeters * Math.PI) /aGearRatio/ (double) aEncoderCPR;
+
         public static final double Conversion = 
             aWheelDiameterMeters * Math.PI /
                 (aGearRatio * aEncoderCPR);
@@ -108,7 +110,7 @@ public final class Constants {
         public static final double aArmSpeed = 0.5;
         public static final double aRollerSpeed = 0.7;
         public static final double aTransitionSpeed = 0.75;
-        public static final double aHighShootSpeed = 0.36;
+        public static final double aHighShootSpeed = 0.38;
         public static final double aLowShootSpeed = 0.25;
         public static final double aFlabberSpeed = 0.25;
         public static final double aLiftSpeed = 0.75;

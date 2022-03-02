@@ -46,10 +46,10 @@ public class driveSubsystem extends SubsystemBase {
     a_frontRight.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,0,0);
     a_backRight.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,0,0);
 
-    a_frontLeft.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit/2, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
-    a_frontRight.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit/2, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
-    a_backLeft.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit/2, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
-    a_backRight.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit/2, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
+    a_frontLeft.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
+    a_frontRight.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
+    a_backLeft.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
+    a_backRight.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
 
     // a_frontLeft.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold, DriveConstants.aTriggerTime));
     // a_frontRight.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold, DriveConstants.aTriggerTime));
@@ -74,17 +74,19 @@ public class driveSubsystem extends SubsystemBase {
   }
 
   private double getLeftWheelSpeed(){
-    return a_frontLeft.getSelectedSensorVelocity() * DriveConstants.aEncoderDistancePerPulse;
+    return a_frontLeft.getSelectedSensorVelocity() * DriveConstants.Conversion;
   }
 
   private double getRightWheelSpeed(){
-    return a_frontRight.getSelectedSensorVelocity() * DriveConstants.aEncoderDistancePerPulse;
+    return a_frontRight.getSelectedSensorVelocity() * DriveConstants.Conversion;
   }
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(getLeftWheelSpeed(), getRightWheelSpeed());
   }
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
+    zeroHeading();
+    a_odometry.resetPosition(pose, a_gyro.getRotation2d());
   }
   public Pose2d getPose() {
     return a_odometry.getPoseMeters();
@@ -118,8 +120,6 @@ public class driveSubsystem extends SubsystemBase {
   public void displayEncoderValues(){
     SmartDashboard.putNumber("Right Data", getRightWheelPosition());
     SmartDashboard.putNumber("Left Data", getLeftWheelPosition());
-    SmartDashboard.putNumber("Left Speed", getLeftWheelSpeed());
-    SmartDashboard.putNumber("Right Speed", getRightWheelSpeed());
   }
 
   private double getLeftWheelPosition(){
@@ -135,10 +135,5 @@ public class driveSubsystem extends SubsystemBase {
   public void setMaxOutput(double maxOutput) {
     a_drive.setMaxOutput(maxOutput);
   }
-  public void setHalfSpeed(){
-    SpeedConstants.driveSpeed = 0.35;
-  }
-  public void setNormalSpeed(){
-    SpeedConstants.driveSpeed = 0.7;
-  }
+
 }

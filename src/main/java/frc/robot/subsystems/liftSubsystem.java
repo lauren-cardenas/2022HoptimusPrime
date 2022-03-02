@@ -28,7 +28,7 @@ public class liftSubsystem extends SubsystemBase {
   }
 
   public void liftRun(double speed){
-    a_lift.set(speed);
+    a_lift.set(-speed);
   }
 
   public void winchRun(double speed){
