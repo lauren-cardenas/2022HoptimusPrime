@@ -8,7 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -37,9 +36,9 @@ public class TwoBallsAuto extends SequentialCommandGroup {
     String myPathName = " ";
     String trajectoryFile = " ";
 
-    myPathName = "twoBall";
+    myPathName = "output/twoBall";
 
-    trajectoryFile = myPathName + "wpilib.json";
+    trajectoryFile = myPathName + ".wpilib.json";
 
     try{
       Path pathTrajectory = Filesystem.getDeployDirectory().toPath().resolve(trajectoryFile);
@@ -48,16 +47,16 @@ public class TwoBallsAuto extends SequentialCommandGroup {
     DriverStation.reportError("Unable to open one or more trajectories",  ex.getStackTrace());
   }
 
-  try {
-    trajectoryFile = myPathName + ".txt";
-    Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryFile);
-    FileWriter fileWriter = new FileWriter(trajectoryPath.toString());
-    PrintWriter printWriter = new PrintWriter(fileWriter);
-    printWriter.print(trajectory.toString());
-    printWriter.close();
-  } catch (IOException e) {
-    e.printStackTrace();
-  }
+  // try {
+  //   trajectoryFile = myPathName + ".txt";
+  //   Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryFile);
+  //   FileWriter fileWriter = new FileWriter(trajectoryPath.toString());
+  //   PrintWriter printWriter = new PrintWriter(fileWriter);
+  //   printWriter.print(trajectory.toString());
+  //   printWriter.close();
+  // } catch (IOException e) {
+  //   e.printStackTrace();
+  // }
 
   drivetrain.resetOdometry(trajectory.getInitialPose());
  

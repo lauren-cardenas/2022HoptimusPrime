@@ -9,7 +9,6 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -19,7 +18,7 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.SpeedConstants;
+
 
 public class driveSubsystem extends SubsystemBase {
   /** Creates a new driveSubsystem. */
@@ -33,12 +32,14 @@ public class driveSubsystem extends SubsystemBase {
 
   private final Gyro a_gyro = new AHRS();
 
+
   private DifferentialDriveOdometry a_odometry;
 
   //create drive boom
   private final DifferentialDrive a_drive = new DifferentialDrive(a_leftMotors,a_rightMotors);
   public driveSubsystem() {
     a_rightMotors.setInverted(true);
+
     
 
     a_frontLeft.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,0,0);
@@ -64,7 +65,6 @@ public class driveSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     a_odometry.update(
-      //a_gyro.getRotation2d(), a_leftEncoder.getDistance(), m_rightEncoder.getDistance());
       a_gyro.getRotation2d(), getLeftWheelPosition(), getRightWheelPosition());
   }
 

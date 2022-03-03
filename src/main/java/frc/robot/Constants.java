@@ -43,7 +43,7 @@ public final class Constants {
 
         public static final double aGearRatio = 10.93;
         public static final int aEncoderCPR = 2040;
-        public static final double aWheelDiameterMeters = 0.16;
+        public static final double aWheelDiameterMeters = 0.1524;
         public static final double aEncoderDistancePerPulse = 
             //(aWheelDiameterMeters * Math.PI) / (double) aEncoderCPR;
             (aWheelDiameterMeters * Math.PI) /aGearRatio/ (double) aEncoderCPR;
@@ -52,15 +52,25 @@ public final class Constants {
             aWheelDiameterMeters * Math.PI /
                 (aGearRatio * aEncoderCPR);
 
-        public static final double asVolts = 0.60028; //0.60903;
-        public static final double avVoltSecondsPerMeter = 2.4515; //0.062107;
-        public static final double aaVoltSecondsSquaredPerMeter = 0.3431; //0.0087418;
+        public static final double asVolts = 0.61601; //0.60903;
+        public static final double avVoltSecondsPerMeter = 2.443; //0.062107;
+        public static final double aaVoltSecondsSquaredPerMeter = 0.34883; //0.0087418;
 
-        public static final double aPDriveVel = 0.0044096; //0.084576;
+        public static final double aPDriveVel = 2.4169; //maybe 3.3387; //0.0044096; //0.084576;
+
+        // Falcon Tolerance
 
         public static final int aAmpLimit = 30;
         public static final int aTriggerThreshold = 25;
         public static final double aTriggerTime = 1.0;
+
+        // Gyro Turn Auto
+        public static final double kTurnP = 1.0;
+        public static final double kTurnD = 1.0;
+        public static final double kTurnI = 1.0;
+        public static final double kTurnToleranceDeg = 1.0;
+        public static final double kTurnRateToleranceDegPerS = 1.0;
+
     }
 
     public static final class AutoConstants{
@@ -73,8 +83,11 @@ public final class Constants {
         // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
         public static final double kRamseteB = 2;
         public static final double kRamseteZeta = 0.7;
+
+        // Auto Distances
         public static final int shootHighDistance = 2;
         public static final int shootLowDistance = 3;
+        // Auto Transition Time
         public static final int transitionTime = 3;
     }
 
@@ -106,7 +119,7 @@ public final class Constants {
     }
     public static final class SpeedConstants{
         public static final double MturnSpeed = 0.60000001;
-        public static double driveSpeed = 0.9;
+        public static final double driveSpeed = 0.9;
         public static final double aArmSpeed = 0.5;
         public static final double aRollerSpeed = 0.7;
         public static final double aTransitionSpeed = 0.75;

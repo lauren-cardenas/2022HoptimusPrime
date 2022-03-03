@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,6 +33,7 @@ import frc.robot.commands.ArmControlDown;
 import frc.robot.commands.ArmControlUp;
 //import frc.robot.commands.ArmDownIntakeOn;
 import frc.robot.commands.DriveTimeCommand;
+import frc.robot.commands.GyroTurnTo;
 import frc.robot.commands.ShootThenDrive;
 import frc.robot.commands.TwoBallsAuto;
 import frc.robot.commands.flapperdown;
@@ -99,14 +101,14 @@ public class RobotContainer {
         a_driverController.getLeftX() * SpeedConstants.MturnSpeed
       ), a_robotDrive));
 
-     /* // Operator Controller Driving 
+      // Operator Controller Driving 
       a_robotDrive.setDefaultCommand(
         new RunCommand(() -> a_robotDrive.arcadeDrive(
           (a_operatorController.getRightTriggerAxis()
              - a_operatorController.getLeftTriggerAxis())* SpeedConstants.driveSpeed,
           a_operatorController.getLeftX() * SpeedConstants.MturnSpeed
         ), a_robotDrive));
-      */
+      
   
       // Must be there
       SmartDashboard.putData(a_robotDrive);
@@ -118,7 +120,7 @@ public class RobotContainer {
     autoChooser.addOption("Shoot Low", a_ShootLowThenDrive);
 
 
-    //autoChooser.addOption("ShootThenPathweaver", new TwoBallsAuto(a_robotDrive, a_shooter, a_transition, AutoConstants.shootHighDistance, SpeedConstants.aHighShootSpeed, AutoConstants.transitionTime, a_flabber, false, 1));
+    autoChooser.addOption("ShootThenPathweaver", new TwoBallsAuto(a_robotDrive, a_shooter, a_transition, AutoConstants.shootHighDistance, SpeedConstants.aHighShootSpeed, AutoConstants.transitionTime, a_flabber, false, 1));
     //autoChooser.addOption("Three Balls", getPathweaverCommand(0));
     // autoChooser.addOption("Two Ball", getPathweaverCommand(1));
     //autoChooser.addOption("Straight", getPathweaverCommand(0));
@@ -145,18 +147,10 @@ public class RobotContainer {
       new JoystickButton(a_driverController, DriverButtons.bLiftRun)
       .whenPressed(() -> a_lift.liftRun(-SpeedConstants.aLiftSpeed))
       .whenReleased(() -> a_lift.liftRun(0.0));
-  
-      // new JoystickButton(a_driverController, DriverButtons.bWinchRun)
-      // .whenPressed(() -> a_lift.winchRun(-SpeedConstants.aWinchSpeed))
-      // .whenReleased(() -> a_lift.winchRun(0.0));
 
       new JoystickButton(a_driverController, DriverButtons.bWinchRun)
-      .whenPressed(new winchgo(a_lift))
+      .whenPressed(() -> a_lift.winchRun(-SpeedConstants.aWinchSpeed))
       .whenReleased(() -> a_lift.winchRun(0.0));
-
-      // new JoystickButton(a_driverController, Button.kY.value)
-      // .whenPressed(() -> a_lift.liftRun(SpeedConstants.aLiftSpeed))
-      // .whenReleased(() -> a_lift.liftRun(0.0));
 
       new JoystickButton(a_driverController, DriverButtons.bWinchBack)
       .whenPressed(() -> a_lift.winchRun(SpeedConstants.aWinchSpeed))
@@ -187,14 +181,6 @@ public class RobotContainer {
     .whenPressed(new ArmControlDown(a_arm))
     .whenReleased(() -> a_arm.intakeArmStop());
 
-    // new JoystickButton(a_operatorController, OperatorButtons.bFlapperdown)
-    // .whenPressed(() -> a_flabber.flapperRun(SpeedConstants.aFlabberSpeed))
-    // .whenReleased(() -> a_flabber.flapperRun(0.0));
-
-    // new JoystickButton(a_operatorController, OperatorButtons.bFlapperup)
-    // .whenPressed(() -> a_flabber.flapperRun(SpeedConstants.aFlabberSpeed))
-    // .whenReleased(() -> a_flabber.flapperRun(0.0));
-
     new JoystickButton(a_operatorController, OperatorButtons.bFlapperdown)
     .whenPressed(new flapperdown(a_flabber))
     .whenReleased(() -> a_flabber.flapperRun(0.0));
@@ -203,7 +189,9 @@ public class RobotContainer {
     .whenPressed(new flapperup(a_flabber))
     .whenReleased(() -> a_flabber.flapperRun(0.0));
 
-  //  ?w RunCommand(() -> a_transition.transitionRun(-a_operatorCo?ntroller.getRightY()*SpeedConstants.aTransitionSpeed),a_transition));
+    // new JoystickButton(a_driverController, Button.kY.value)
+    // .whenPressed(new GyroTurnTo(90, a_robotDrive).withTimeout(5)); 
+
   }
 //   public Command getPathweaverCommand(int json){
 
