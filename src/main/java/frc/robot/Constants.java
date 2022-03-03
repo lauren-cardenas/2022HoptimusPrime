@@ -85,7 +85,7 @@ public final class Constants {
         public static final double kRamseteZeta = 0.7;
 
         // Auto Distances
-        public static final int shootHighDistance = 2;
+        public static final double shootHighDistance = 2.5;
         public static final int shootLowDistance = 3;
         // Auto Transition Time
         public static final int transitionTime = 3;
@@ -123,8 +123,10 @@ public final class Constants {
         public static final double aArmSpeed = 0.5;
         public static final double aRollerSpeed = 0.7;
         public static final double aTransitionSpeed = 0.75;
-        public static final double aHighShootSpeed = 0.38;
+        public static final double aHighShootSpeed = 0.37;
         public static final double aLowShootSpeed = 0.25;
+        public static final double aHighCloseShootSpeed = 0.37;
+        public static final double kFarShootSpeed = 0.47;
         public static final double aFlabberSpeed = 0.25;
         public static final double aLiftSpeed = 0.75;
         public static final double aWinchSpeed = 1.0;

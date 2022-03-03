@@ -19,8 +19,11 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.SpeedConstants;
+import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.driveSubsystem;
 import frc.robot.subsystems.flapperSubsystem;
+import frc.robot.subsystems.intakeSubsystem;
 import frc.robot.subsystems.shooterSubsystem;
 import frc.robot.subsystems.transitionSubsystem;
 
@@ -31,7 +34,9 @@ public class TwoBallsAuto extends SequentialCommandGroup {
   /** Creates a new ShootThenPathweaver. */
 
   Trajectory trajectory;
-  public TwoBallsAuto(driveSubsystem drivetrain, shooterSubsystem shooter, transitionSubsystem transition, double distance, double speed, double seconds, flapperSubsystem flapper, boolean flapperType, int upDown) {
+  public TwoBallsAuto(driveSubsystem drivetrain, shooterSubsystem shooter, transitionSubsystem transition,
+  armSubsystem arm, intakeSubsystem intake,
+  double distance, double speed, double seconds, flapperSubsystem flapper, boolean flapperType, int upDown) {
 
     String myPathName = " ";
     String trajectoryFile = " ";
@@ -46,17 +51,6 @@ public class TwoBallsAuto extends SequentialCommandGroup {
   } catch (IOException ex) {
     DriverStation.reportError("Unable to open one or more trajectories",  ex.getStackTrace());
   }
-
-  // try {
-  //   trajectoryFile = myPathName + ".txt";
-  //   Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryFile);
-  //   FileWriter fileWriter = new FileWriter(trajectoryPath.toString());
-  //   PrintWriter printWriter = new PrintWriter(fileWriter);
-  //   printWriter.print(trajectory.toString());
-  //   printWriter.close();
-  // } catch (IOException e) {
-  //   e.printStackTrace();
-  // }
 
   drivetrain.resetOdometry(trajectory.getInitialPose());
  
@@ -81,10 +75,25 @@ public class TwoBallsAuto extends SequentialCommandGroup {
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+    /*
     addCommands(
       new ShootThenDrive(drivetrain, shooter, transition, distance, speed, seconds, flapper, flapperType, upDown),
       ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0,0))
     );
+    */
+
+    addCommands(
+      new ShootThenDrive(drivetrain, shooter, transition, distance, speed, seconds, flapper, flapperType, upDown)
+      .andThen(() -> drivetrain.resetOdometry(trajectory.getInitialPose())),
+      new ArmControlDown(arm)
+      .andThen(() -> intake.intakeRun(SpeedConstants.aRollerSpeed)),
+      //.andThen(() -> transition.transitionRun(0.3)),
+      ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0,0)),
+      new ArmControlUp(arm)
+      .andThen(() -> intake.intakeRun(0.0)),
+      new ShootTimeCommand(0.39, seconds, shooter, transition, flapper)
+    );
+    
   }
 }
 

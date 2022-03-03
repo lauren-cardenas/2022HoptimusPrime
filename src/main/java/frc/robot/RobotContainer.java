@@ -80,6 +80,8 @@ public class RobotContainer {
   private final Command m_ShootThenDrive = 
     new ShootThenDrive(a_robotDrive, a_shooter, a_transition, AutoConstants.shootHighDistance, SpeedConstants.aHighShootSpeed, 3, a_flabber, false, 1);
   
+  private final Command m_ShootCloseDrive =
+    new ShootThenDrive(a_robotDrive, a_shooter, a_transition, AutoConstants.shootHighDistance, SpeedConstants.aHighCloseShootSpeed, 3, a_flabber, false, 1);
     
   private final Command a_ShootLowThenDrive = 
     new ShootThenDrive(a_robotDrive, a_shooter, a_transition, AutoConstants.shootLowDistance, SpeedConstants.aLowShootSpeed, AutoConstants.transitionTime, a_flabber, true, -1);
@@ -100,7 +102,7 @@ public class RobotContainer {
            - a_driverController.getLeftTriggerAxis())* SpeedConstants.driveSpeed,
         a_driverController.getLeftX() * SpeedConstants.MturnSpeed
       ), a_robotDrive));
-
+/*
       // Operator Controller Driving 
       a_robotDrive.setDefaultCommand(
         new RunCommand(() -> a_robotDrive.arcadeDrive(
@@ -108,6 +110,7 @@ public class RobotContainer {
              - a_operatorController.getLeftTriggerAxis())* SpeedConstants.driveSpeed,
           a_operatorController.getLeftX() * SpeedConstants.MturnSpeed
         ), a_robotDrive));
+*/
       
   
       // Must be there
@@ -118,9 +121,10 @@ public class RobotContainer {
     autoChooser.setDefaultOption("Simple Auto", m_simpleAuto);
     autoChooser.addOption("shoot then drive", m_ShootThenDrive);
     autoChooser.addOption("Shoot Low", a_ShootLowThenDrive);
+    autoChooser.addOption("Shoot close high",m_ShootCloseDrive);
 
 
-    autoChooser.addOption("ShootThenPathweaver", new TwoBallsAuto(a_robotDrive, a_shooter, a_transition, AutoConstants.shootHighDistance, SpeedConstants.aHighShootSpeed, AutoConstants.transitionTime, a_flabber, false, 1));
+    autoChooser.addOption("ShootThenPathweaver", new TwoBallsAuto(a_robotDrive, a_shooter, a_transition, a_arm, a_rollerIntake, AutoConstants.shootHighDistance, SpeedConstants.aHighShootSpeed, AutoConstants.transitionTime, a_flabber, false, 1));
     //autoChooser.addOption("Three Balls", getPathweaverCommand(0));
     // autoChooser.addOption("Two Ball", getPathweaverCommand(1));
     //autoChooser.addOption("Straight", getPathweaverCommand(0));
