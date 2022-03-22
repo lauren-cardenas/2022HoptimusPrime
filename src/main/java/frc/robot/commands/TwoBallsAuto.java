@@ -36,7 +36,7 @@ public class TwoBallsAuto extends SequentialCommandGroup {
   Trajectory trajectory;
   public TwoBallsAuto(driveSubsystem drivetrain, shooterSubsystem shooter, transitionSubsystem transition,
   armSubsystem arm, intakeSubsystem intake,
-  double distance, double speed, double seconds, flapperSubsystem flapper, boolean flapperType, int upDown) {
+  double distance, double speed, double seconds) {
 
     String myPathName = " ";
     String trajectoryFile = " ";
@@ -83,7 +83,7 @@ public class TwoBallsAuto extends SequentialCommandGroup {
     */
 
     addCommands(
-      new ShootThenDrive(drivetrain, shooter, transition, distance, speed, seconds, flapper, flapperType, upDown)
+      new ShootThenDrive(drivetrain, shooter, transition, distance, speed, seconds)
       .andThen(() -> drivetrain.resetOdometry(trajectory.getInitialPose())),
       new ArmControlDown(arm)
       .andThen(() -> intake.intakeRun(SpeedConstants.aRollerSpeed)),
@@ -91,7 +91,7 @@ public class TwoBallsAuto extends SequentialCommandGroup {
       ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0,0)),
       new ArmControlUp(arm)
       .andThen(() -> intake.intakeRun(0.0)),
-      new ShootTimeCommand(0.39, seconds, shooter, transition, flapper)
+      new ShootTimeCommand(0.39, seconds, shooter, transition)
     );
     
   }

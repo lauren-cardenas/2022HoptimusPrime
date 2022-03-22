@@ -18,15 +18,13 @@ public class ShootThenDrive extends SequentialCommandGroup {
   /** Creates a new ShootThenDrive. */
   public ShootThenDrive(
     driveSubsystem drive, shooterSubsystem shoot, transitionSubsystem transition,
-    double distance, double speed, double seconds, flapperSubsystem flapper, boolean flapperType, int upDown
-  ) {
+    double distance, double speed, double seconds) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new FlapperCommand(flapperType, upDown, flapper),
       //Shoot preloaded cargo
       new ShootTimeCommand(
-        speed, seconds, shoot, transition, flapper),
+        speed, seconds, shoot, transition),
       //Drives to distance
       new DriveDistanceCommand(
         distance, -AutoConstants.kAutoDriveSpeed, drive)

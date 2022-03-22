@@ -15,12 +15,14 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
@@ -36,20 +38,23 @@ import frc.robot.commands.DriveTimeCommand;
 import frc.robot.commands.GyroTurnTo;
 import frc.robot.commands.ShootThenDrive;
 import frc.robot.commands.TwoBallsAuto;
-import frc.robot.commands.flapperdown;
-import frc.robot.commands.flapperup;
+// import frc.robot.commands.flapperdown;
+// import frc.robot.commands.flapperup;
 import frc.robot.commands.winchgo;
+import frc.robot.subsystems.SecondLift;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.driveSubsystem;
-import frc.robot.subsystems.flapperSubsystem;
+//import frc.robot.subsystems.flapperSubsystem;
 import frc.robot.subsystems.intakeSubsystem;
 import frc.robot.subsystems.liftSubsystem;
 import frc.robot.subsystems.shooterSubsystem;
 import frc.robot.subsystems.transitionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.NetworkButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 /**
@@ -65,8 +70,9 @@ public class RobotContainer {
   private final intakeSubsystem a_rollerIntake = new intakeSubsystem();
   private final armSubsystem a_arm = new armSubsystem();
   private final transitionSubsystem a_transition = new transitionSubsystem();
-  private final flapperSubsystem a_flabber = new flapperSubsystem();
+  //private final flapperSubsystem a_flabber = new flapperSubsystem();
   private final liftSubsystem a_lift = new liftSubsystem();
+  private final SecondLift a_sSecondLift = new SecondLift();
 
   XboxController a_driverController = new XboxController(OIConstants.aDriverControllerPort);
   XboxController a_operatorController = new XboxController(OIConstants.aOperatorControllerPort);
@@ -78,13 +84,13 @@ public class RobotContainer {
       AutoConstants.kAutoDriveTime, AutoConstants.kAutoDriveSpeed, a_robotDrive);
 
   private final Command m_ShootThenDrive = 
-    new ShootThenDrive(a_robotDrive, a_shooter, a_transition, AutoConstants.shootHighDistance, SpeedConstants.aHighShootSpeed, 3, a_flabber, false, 1);
+    new ShootThenDrive(a_robotDrive, a_shooter, a_transition, AutoConstants.shootHighDistance, SpeedConstants.aHighShootSpeed,AutoConstants.transitionTime);
   
   private final Command m_ShootCloseDrive =
-    new ShootThenDrive(a_robotDrive, a_shooter, a_transition, AutoConstants.shootHighDistance, SpeedConstants.aHighCloseShootSpeed, 3, a_flabber, false, 1);
+    new ShootThenDrive(a_robotDrive, a_shooter, a_transition, AutoConstants.shootHighDistance, SpeedConstants.aHighCloseShootSpeed,AutoConstants.transitionTime);
     
   private final Command a_ShootLowThenDrive = 
-    new ShootThenDrive(a_robotDrive, a_shooter, a_transition, AutoConstants.shootLowDistance, SpeedConstants.aLowShootSpeed, AutoConstants.transitionTime, a_flabber, true, -1);
+    new ShootThenDrive(a_robotDrive, a_shooter, a_transition, AutoConstants.shootLowDistance, SpeedConstants.aLowShootSpeed, AutoConstants.transitionTime );
   
 
 
@@ -96,21 +102,23 @@ public class RobotContainer {
     configureButtonBindings();
 
     // Driver Controller Driving
+    /*
     a_robotDrive.setDefaultCommand(
       new RunCommand(() -> a_robotDrive.arcadeDrive(
         (a_driverController.getRightTriggerAxis()
            - a_driverController.getLeftTriggerAxis())* SpeedConstants.driveSpeed,
         a_driverController.getLeftX() * SpeedConstants.MturnSpeed
       ), a_robotDrive));
-/*
+    */
+
       // Operator Controller Driving 
       a_robotDrive.setDefaultCommand(
         new RunCommand(() -> a_robotDrive.arcadeDrive(
           (a_operatorController.getRightTriggerAxis()
-             - a_operatorController.getLeftTriggerAxis())* SpeedConstants.driveSpeed,
+             - a_operatorController.getLeftTriggerAxis()),//* SpeedConstants.driveSpeed,
           a_operatorController.getLeftX() * SpeedConstants.MturnSpeed
         ), a_robotDrive));
-*/
+
       
   
       // Must be there
@@ -124,7 +132,7 @@ public class RobotContainer {
     autoChooser.addOption("Shoot close high",m_ShootCloseDrive);
 
 
-    autoChooser.addOption("ShootThenPathweaver", new TwoBallsAuto(a_robotDrive, a_shooter, a_transition, a_arm, a_rollerIntake, AutoConstants.shootHighDistance, SpeedConstants.aHighShootSpeed, AutoConstants.transitionTime, a_flabber, false, 1));
+    autoChooser.addOption("ShootThenPathweaver", new TwoBallsAuto(a_robotDrive, a_shooter, a_transition, a_arm, a_rollerIntake, AutoConstants.shootHighDistance, SpeedConstants.aHighShootSpeed, AutoConstants.transitionTime));
     //autoChooser.addOption("Three Balls", getPathweaverCommand(0));
     // autoChooser.addOption("Two Ball", getPathweaverCommand(1));
     //autoChooser.addOption("Straight", getPathweaverCommand(0));
@@ -152,6 +160,10 @@ public class RobotContainer {
       .whenPressed(() -> a_lift.liftRun(-SpeedConstants.aLiftSpeed))
       .whenReleased(() -> a_lift.liftRun(0.0));
 
+      new JoystickButton(a_driverController, DriverButtons.bLiftback)
+      .whenPressed(() -> a_lift.liftRun(SpeedConstants.aLiftSpeed))
+      .whenReleased(() -> a_lift.liftRun(0.0));
+
       new JoystickButton(a_driverController, DriverButtons.bWinchRun)
       .whenPressed(() -> a_lift.winchRun(-SpeedConstants.aWinchSpeed))
       .whenReleased(() -> a_lift.winchRun(0.0));
@@ -159,6 +171,14 @@ public class RobotContainer {
       new JoystickButton(a_driverController, DriverButtons.bWinchBack)
       .whenPressed(() -> a_lift.winchRun(SpeedConstants.aWinchSpeed))
       .whenReleased(() -> a_lift.winchRun(0.0));
+
+      new JoystickButton(a_driverController, DriverButtons.bSecondLiftUp)
+      .whenPressed(() -> a_sSecondLift.secondLift(SpeedConstants.aSecondLiftSpeed))
+      .whenReleased(() -> a_sSecondLift.secondLift(0.0));
+
+      new JoystickButton(a_driverController, DriverButtons.bSecondLiftDown)
+      .whenPressed(() -> a_sSecondLift.secondLift(-SpeedConstants.aSecondLiftSpeed))
+      .whenReleased(() -> a_sSecondLift.secondLift(0.0));
     
 
     //*************operator****************//
@@ -166,12 +186,12 @@ public class RobotContainer {
     //Shooter (High)
     new POVButton(a_operatorController, 0)
     .whenPressed(() -> a_shooter.shooterRun(SpeedConstants.aHighShootSpeed))
-    .whenReleased(() -> a_shooter.shooterRun(0.0));
+    .whenReleased(() -> a_shooter.shooterRun(0.0));//changed
 
     //Shooter (Low)
     new POVButton(a_operatorController, 180)
     .whenPressed(() -> a_shooter.shooterRun(SpeedConstants.aLowShootSpeed))
-    .whenReleased(() -> a_shooter.shooterRun(0.0));
+    .whenReleased(() -> a_shooter.shooterRun(0.0));//changed
 
     new JoystickButton(a_operatorController, OperatorButtons.bIntakeRun)
     .whenPressed(() -> a_rollerIntake.intakeRun(SpeedConstants.aRollerSpeed))
@@ -185,13 +205,13 @@ public class RobotContainer {
     .whenPressed(new ArmControlDown(a_arm))
     .whenReleased(() -> a_arm.intakeArmStop());
 
-    new JoystickButton(a_operatorController, OperatorButtons.bFlapperdown)
-    .whenPressed(new flapperdown(a_flabber))
-    .whenReleased(() -> a_flabber.flapperRun(0.0));
+    new JoystickButton(a_operatorController, OperatorButtons.bHalfSpeed)
+    .whenPressed(() -> a_robotDrive.setMaxOutput(0.5))
+    .whenReleased(() -> a_robotDrive.setMaxOutput(0.9));
 
-    new JoystickButton(a_operatorController, OperatorButtons.bFlapperup)
-    .whenPressed(new flapperup(a_flabber))
-    .whenReleased(() -> a_flabber.flapperRun(0.0));
+    new JoystickButton(a_operatorController, OperatorButtons.bFullSpeed)
+    .whenPressed(() -> a_robotDrive.setMaxOutput(1.0))
+    .whenReleased(() -> a_robotDrive.setMaxOutput(0.9));
 
     // new JoystickButton(a_driverController, Button.kY.value)
     // .whenPressed(new GyroTurnTo(90, a_robotDrive).withTimeout(5)); 

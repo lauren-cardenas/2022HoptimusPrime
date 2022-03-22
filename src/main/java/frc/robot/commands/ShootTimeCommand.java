@@ -7,7 +7,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.SpeedConstants;
-import frc.robot.subsystems.flapperSubsystem;
 import frc.robot.subsystems.shooterSubsystem;
 import frc.robot.subsystems.transitionSubsystem;
 
@@ -15,7 +14,6 @@ public class ShootTimeCommand extends CommandBase {
   /** Creates a new ShootTimeCommand. */
   private final shooterSubsystem m_shoot;
   private final transitionSubsystem m_transition;
-  private final flapperSubsystem a_flapper;
   private final double m_shootSpeed;
   private final double m_seconds;
 
@@ -24,15 +22,13 @@ public class ShootTimeCommand extends CommandBase {
 
   public ShootTimeCommand(
     double shootSpeed, double seconds,
-    shooterSubsystem shoot, transitionSubsystem transition,
-    flapperSubsystem flapper) {
+    shooterSubsystem shoot, transitionSubsystem transition) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shootSpeed = shootSpeed;
     m_seconds = seconds;
     m_shoot = shoot;
     m_transition = transition;
-    a_flapper = flapper;
-    addRequirements(m_shoot, m_transition,a_flapper);
+    addRequirements(m_shoot, m_transition);
   }
 
   // Called when the command is initially scheduled.

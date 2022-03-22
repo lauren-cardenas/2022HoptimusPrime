@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
+import edu.wpi.first.wpilibj.SPI;
 
 
 public class driveSubsystem extends SubsystemBase {
@@ -30,7 +31,7 @@ public class driveSubsystem extends SubsystemBase {
   private final MotorControllerGroup a_leftMotors = new MotorControllerGroup(a_frontLeft, a_backLeft);
   private final MotorControllerGroup a_rightMotors = new MotorControllerGroup(a_frontRight, a_backRight);
 
-  private final Gyro a_gyro = new AHRS();
+  private final Gyro a_gyro = new AHRS(SPI.Port.kMXP);
 
 
   private DifferentialDriveOdometry a_odometry;
