@@ -4,29 +4,14 @@
 
 package frc.robot;
 
-import java.io.IOException;
-import java.nio.file.Path;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.DriverButtons;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.OperatorButtons;
@@ -35,12 +20,10 @@ import frc.robot.commands.ArmControlDown;
 import frc.robot.commands.ArmControlUp;
 //import frc.robot.commands.ArmDownIntakeOn;
 import frc.robot.commands.DriveTimeCommand;
-import frc.robot.commands.GyroTurnTo;
 import frc.robot.commands.ShootThenDrive;
 import frc.robot.commands.TwoBallsAuto;
 // import frc.robot.commands.flapperdown;
 // import frc.robot.commands.flapperup;
-import frc.robot.commands.winchgo;
 import frc.robot.subsystems.SecondLift;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.driveSubsystem;
@@ -50,11 +33,8 @@ import frc.robot.subsystems.liftSubsystem;
 import frc.robot.subsystems.shooterSubsystem;
 import frc.robot.subsystems.transitionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.NetworkButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 /**
