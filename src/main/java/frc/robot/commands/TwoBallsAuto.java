@@ -4,9 +4,7 @@
 
 package frc.robot.commands;
 
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Path;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
@@ -22,7 +20,6 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SpeedConstants;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.driveSubsystem;
-import frc.robot.subsystems.flapperSubsystem;
 import frc.robot.subsystems.intakeSubsystem;
 import frc.robot.subsystems.shooterSubsystem;
 import frc.robot.subsystems.transitionSubsystem;

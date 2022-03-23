@@ -4,28 +4,25 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.TransitionCommand;
 import frc.robot.Constants.SpeedConstants;
 import frc.robot.subsystems.armSubsystem;
-import frc.robot.subsystems.driveSubsystem;
+import frc.robot.subsystems. driveSubsystem;
 import frc.robot.subsystems.intakeSubsystem;
-import frc.robot.subsystems.shooterSubsystem;
 import frc.robot.subsystems.transitionSubsystem;
+import frc.robot.subsystems.shooterSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AutoTwoBall extends SequentialCommandGroup {
-  /** Creates a new AutoTwoBall. */
-  public AutoTwoBall(double distance, double robotSpeed, 
+public class AutoThreeBall extends SequentialCommandGroup {
+  /** Creates a new AutoThreeBall. */
+  public AutoThreeBall(double distance, double robotSpeed, 
   driveSubsystem drive, armSubsystem arm, intakeSubsystem intake, transitionSubsystem transition, shooterSubsystem shoot) {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
+    
     addCommands(
       new ArmControlDown(arm)
       .beforeStarting(() -> intake.intakeRun(SpeedConstants.aRollerSpeed)),
@@ -34,7 +31,13 @@ public class AutoTwoBall extends SequentialCommandGroup {
       .beforeStarting(() -> intake.intakeRun(0.0)),
       new turnSimple(drive, 156, true),
       new ShootTimeCommand(SpeedConstants.aHighCloseShootSpeed, 4, shoot, transition)
-      .beforeStarting(() -> intake.intakeRun(SpeedConstants.aRollerSpeed))
+      .beforeStarting(() -> intake.intakeRun(SpeedConstants.aRollerSpeed)),
+      new turnSimple(drive, 73, true),
+      new DriveDistanceCommand(1, -robotSpeed, drive)
+     
+
+
+
     );
   }
 }

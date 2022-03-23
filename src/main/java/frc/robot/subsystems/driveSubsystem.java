@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -72,6 +72,10 @@ public class driveSubsystem extends SubsystemBase {
   public void arcadeDrive(double fwd, double rot) {
     a_drive.arcadeDrive(fwd, rot);
     displayEncoderValues();
+  }
+
+  public void tankDrive(double left, double right){
+    a_drive.tankDrive(left, right);
   }
 
   private double getLeftWheelSpeed(){

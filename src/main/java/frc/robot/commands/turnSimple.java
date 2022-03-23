@@ -5,48 +5,48 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.driveSubsystem;
 
-public class DriveDistanceCommand extends CommandBase {
-  /** Creates a new DriveDistanceCommand. */
-  private final driveSubsystem m_drive;
-  private final double m_distance;
-  private final double m_speed;
+public class turnSimple extends CommandBase {
+  /** Creates a new turnSimple. */
+  private final driveSubsystem drive;
+  private final int kAngle;
+  private final boolean kDirection;
 
-  public DriveDistanceCommand(double inches, double speed, driveSubsystem drive) {
+  public turnSimple(driveSubsystem m_drive, int angle, boolean direction) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_distance = inches;
-    m_speed = speed;
-    m_drive = drive;
-    addRequirements(m_drive);
+    drive = m_drive;
+    kAngle = angle;
+    kDirection = direction;
+    addRequirements(drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drive.resetEncoders();
-    m_drive.arcadeDrive(m_speed, 0);
+    drive.zeroHeading();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive.arcadeDrive(-m_speed, 0);
+    if(kDirection){
+      drive.arcadeDrive(0.0, AutoConstants.kAutoTurnSpeed);
+    } else{
+      drive.arcadeDrive(0.0, -AutoConstants.kAutoSlowTurnSpeed);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drive.arcadeDrive(0, 0);
+    drive.arcadeDrive(0.0, 0.0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Math.signum(m_distance) == 1){
-    return Math.abs(m_drive.getAverageEncoderDistance()) >= m_distance;
-    } else{
-    return (m_drive.getAverageEncoderDistance()) <= m_distance;
-    }
+    return drive.getHeading() <= -kAngle;
   }
 }

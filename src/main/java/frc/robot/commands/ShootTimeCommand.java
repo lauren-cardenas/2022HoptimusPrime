@@ -44,7 +44,7 @@ public class ShootTimeCommand extends CommandBase {
   @Override
   public void execute() {
     m_shoot.shooterRun(m_shootSpeed);
-    if (m_timer.get() > 1.5){
+    if (m_timer.get() > 2){
       m_transition.transitionRun(SpeedConstants.aTransitionSpeedAuto-0.06);
 
     }

@@ -4,57 +4,38 @@
 
 package frc.robot;
 
-import java.io.IOException;
-import java.nio.file.Path;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.DriverButtons;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.OperatorButtons;
 import frc.robot.Constants.SpeedConstants;
 import frc.robot.commands.ArmControlDown;
 import frc.robot.commands.ArmControlUp;
-//import frc.robot.commands.ArmDownIntakeOn;
+import frc.robot.commands.AutoThreeBall;
+import frc.robot.commands.AutoTwoBall;
 import frc.robot.commands.DriveTimeCommand;
 import frc.robot.commands.GyroTurnTo;
 import frc.robot.commands.ShootThenDrive;
+import frc.robot.commands.TurnToAngle;
 import frc.robot.commands.TwoBallsAuto;
-// import frc.robot.commands.flapperdown;
-// import frc.robot.commands.flapperup;
-import frc.robot.commands.winchgo;
+import frc.robot.commands.turnSimple;
 import frc.robot.subsystems.SecondLift;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.driveSubsystem;
-//import frc.robot.subsystems.flapperSubsystem;
 import frc.robot.subsystems.intakeSubsystem;
 import frc.robot.subsystems.liftSubsystem;
 import frc.robot.subsystems.shooterSubsystem;
 import frc.robot.subsystems.transitionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.NetworkButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 /**
@@ -70,7 +51,6 @@ public class RobotContainer {
   private final intakeSubsystem a_rollerIntake = new intakeSubsystem();
   private final armSubsystem a_arm = new armSubsystem();
   private final transitionSubsystem a_transition = new transitionSubsystem();
-  //private final flapperSubsystem a_flabber = new flapperSubsystem();
   private final liftSubsystem a_lift = new liftSubsystem();
   private final SecondLift a_sSecondLift = new SecondLift();
 
@@ -91,8 +71,12 @@ public class RobotContainer {
     
   private final Command a_ShootLowThenDrive = 
     new ShootThenDrive(a_robotDrive, a_shooter, a_transition, AutoConstants.shootLowDistance, SpeedConstants.aLowShootSpeed, AutoConstants.transitionTime );
-  
 
+  private final Command m_twoBallAuto =
+    new AutoTwoBall(1.5, AutoConstants.kAutoDriveSpeed, a_robotDrive, a_arm, a_rollerIntake, a_transition, a_shooter);
+  
+  private final Command m_threeBallAuto = 
+    new AutoThreeBall(1.5, AutoConstants.kAutoDriveSpeed, a_robotDrive, a_arm, a_rollerIntake, a_transition, a_shooter); 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -130,6 +114,8 @@ public class RobotContainer {
     autoChooser.addOption("shoot then drive", m_ShootThenDrive);
     autoChooser.addOption("Shoot Low", a_ShootLowThenDrive);
     autoChooser.addOption("Shoot close high",m_ShootCloseDrive);
+    autoChooser.addOption("Two Ball", m_twoBallAuto);
+    autoChooser.addOption("Three Ball", m_threeBallAuto);
 
 
     autoChooser.addOption("ShootThenPathweaver", new TwoBallsAuto(a_robotDrive, a_shooter, a_transition, a_arm, a_rollerIntake, AutoConstants.shootHighDistance, SpeedConstants.aHighShootSpeed, AutoConstants.transitionTime));
@@ -149,6 +135,7 @@ public class RobotContainer {
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   * @param Button 
    */
   private void configureButtonBindings() {
 
@@ -213,8 +200,8 @@ public class RobotContainer {
     .whenPressed(() -> a_robotDrive.setMaxOutput(1.0))
     .whenReleased(() -> a_robotDrive.setMaxOutput(0.9));
 
-    // new JoystickButton(a_driverController, Button.kY.value)
-    // .whenPressed(new GyroTurnTo(90, a_robotDrive).withTimeout(5)); 
+    new JoystickButton(a_operatorController, OperatorButtons.bTurn)
+    .whenPressed(new turnSimple(a_robotDrive, 90, true));
 
   }
 //   public Command getPathweaverCommand(int json){
