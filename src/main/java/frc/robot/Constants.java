@@ -131,7 +131,7 @@ public final class Constants {
         public static final double aRollerSpeed = 0.7;
         public static final double aTransitionSpeed = 0.75;
         public static final double aHighShootSpeed = 0.37;
-        public static final double aLowShootSpeed = 0.25;
+        public static final double aLowShootSpeed = 0.48;
         public static final double aHighCloseShootSpeed = 0.37;
         public static final double kFarShootSpeed = 0.47;
         public static final double aFlabberSpeed = 0.25;
