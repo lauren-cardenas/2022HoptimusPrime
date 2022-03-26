@@ -21,11 +21,15 @@ import frc.robot.commands.ArmControlUp;
 import frc.robot.commands.AutoThreeBall;
 import frc.robot.commands.AutoTwoBall;
 import frc.robot.commands.DriveTimeCommand;
-import frc.robot.commands.GyroTurnTo;
 import frc.robot.commands.ShootThenDrive;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.commands.TwoBallsAuto;
+<<<<<<< HEAD
 import frc.robot.commands.turnSimple;
+=======
+// import frc.robot.commands.flapperdown;
+// import frc.robot.commands.flapperup;
+>>>>>>> a30fa14e00b1f00dcdc02f02e05e77863d9cbc3f
 import frc.robot.subsystems.SecondLift;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.driveSubsystem;
