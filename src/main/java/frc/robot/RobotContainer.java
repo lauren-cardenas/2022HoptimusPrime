@@ -22,9 +22,8 @@ import frc.robot.commands.AutoThreeBall;
 import frc.robot.commands.AutoTwoBall;
 import frc.robot.commands.DriveTimeCommand;
 import frc.robot.commands.ShootThenDrive;
-import frc.robot.commands.TurnToAngle;
-import frc.robot.commands.TwoBallsAuto;
 import frc.robot.commands.turnSimple;
+import frc.robot.commands.unusedCommands.TwoBallsAuto;
 import frc.robot.subsystems.SecondLift;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.driveSubsystem;
@@ -61,9 +60,6 @@ public class RobotContainer {
   private final Command m_simpleAuto =
     new DriveTimeCommand(
       AutoConstants.kAutoDriveTime, AutoConstants.kAutoDriveSpeed, a_robotDrive);
-
-  private final Command m_ShootThenDrive = 
-    new ShootThenDrive(a_robotDrive, a_shooter, a_transition, AutoConstants.shootHighDistance, SpeedConstants.aHighShootSpeed,AutoConstants.transitionTime);
   
   private final Command m_ShootCloseDrive =
     new ShootThenDrive(a_robotDrive, a_shooter, a_transition, AutoConstants.shootHighDistance, SpeedConstants.aHighCloseShootSpeed,AutoConstants.transitionTime);
@@ -110,14 +106,11 @@ public class RobotContainer {
 
     //Auto Choices
     autoChooser.setDefaultOption("Simple Auto", m_simpleAuto);
-    autoChooser.addOption("shoot then drive", m_ShootThenDrive);
     autoChooser.addOption("Shoot Low", a_ShootLowThenDrive);
-    autoChooser.addOption("Shoot close high",m_ShootCloseDrive);
+    autoChooser.addOption("One Ball",m_ShootCloseDrive);
     autoChooser.addOption("Two Ball", m_twoBallAuto);
     autoChooser.addOption("Three Ball", m_threeBallAuto);
 
-
-    autoChooser.addOption("ShootThenPathweaver", new TwoBallsAuto(a_robotDrive, a_shooter, a_transition, a_arm, a_rollerIntake, AutoConstants.shootHighDistance, SpeedConstants.aHighShootSpeed, AutoConstants.transitionTime));
     //autoChooser.addOption("Three Balls", getPathweaverCommand(0));
     // autoChooser.addOption("Two Ball", getPathweaverCommand(1));
     //autoChooser.addOption("Straight", getPathweaverCommand(0));
