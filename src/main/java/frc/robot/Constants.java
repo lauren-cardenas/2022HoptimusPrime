@@ -58,11 +58,11 @@ public final class Constants {
             aWheelDiameterMeters * Math.PI /
                 (aGearRatio * aEncoderCPR);
 
-        public static final double asVolts = 0.61026; //0.61601; //0.60903;
-        public static final double avVoltSecondsPerMeter = 2.3519; //2.443; //0.062107;
-        public static final double aaVoltSecondsSquaredPerMeter = 0.4225; //0.34883; //0.0087418;
+        public static final double asVolts = 0.49819; //0.61601; //0.60903;
+        public static final double avVoltSecondsPerMeter = 2.38; //2.443; //0.062107;
+        public static final double aaVoltSecondsSquaredPerMeter = 0.59487; //0.34883; //0.0087418;
 
-        public static final double aPDriveVel = 19.916; //2.4169; //maybe 3.3387; //0.0044096; //0.084576;
+        public static final double aPDriveVel = 2.6116; //19.916; //2.4169; //maybe 3.3387; //0.0044096; //0.084576;
 
         // Falcon Tolerance
 

@@ -9,9 +9,13 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -33,8 +37,8 @@ public class driveSubsystem extends SubsystemBase {
 
   private final Gyro a_gyro = new AHRS(SPI.Port.kMXP);
 
-
   private DifferentialDriveOdometry a_odometry;
+
 
   //create drive boom
   private final DifferentialDrive a_drive = new DifferentialDrive(a_leftMotors,a_rightMotors);
@@ -85,9 +89,11 @@ public class driveSubsystem extends SubsystemBase {
   private double getRightWheelSpeed(){
     return a_frontRight.getSelectedSensorVelocity() * DriveConstants.Conversion;
   }
+
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(getLeftWheelSpeed(), getRightWheelSpeed());
   }
+  
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
     zeroHeading();

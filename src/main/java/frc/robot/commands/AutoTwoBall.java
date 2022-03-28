@@ -5,7 +5,9 @@
 package frc.robot.commands;
 
 
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.SpeedConstants;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.driveSubsystem;
@@ -28,9 +30,16 @@ public class AutoTwoBall extends SequentialCommandGroup {
       new DriveDistanceCommand(distance, robotSpeed, drive),
       new DriveDistanceCommand(-1.45, -robotSpeed, drive)
       .beforeStarting(() -> intake.intakeRun(0.0)),
-      new turnSimple(drive, 156, true),
-      new ShootTimeCommand(SpeedConstants.aHighCloseShootSpeed, 4, shoot, transition)
+      new turnSimple(drive, 156, true)
+      .beforeStarting(() -> shoot.shooterRun(SpeedConstants.aHighShootSpeed)),
+      new RunCommand(() -> transition.transitionRun(SpeedConstants.aTransitionSpeedAuto))
+      //new ShootTimeCommand(SpeedConstants.aHighCloseShootSpeed, 0.25, shoot, transition)
       .beforeStarting(() -> intake.intakeRun(SpeedConstants.aRollerSpeed))
+      .raceWith(new WaitCommand(3)),
+      new DriveDistanceCommand(-1.5, -robotSpeed, drive)
+      .beforeStarting(new ShootTimeCommand(0, 0, shoot, transition))
+      .beforeStarting(()-> intake.intakeRun(0.0))
+      .beforeStarting(() -> transition.transitionRun(0.0))
     );
   }
 }

@@ -22,8 +22,10 @@ import frc.robot.commands.AutoThreeBall;
 import frc.robot.commands.AutoTwoBall;
 import frc.robot.commands.DriveTimeCommand;
 import frc.robot.commands.ShootThenDrive;
+import frc.robot.commands.ThreeBallPath;
+import frc.robot.commands.beastMode;
 import frc.robot.commands.turnSimple;
-import frc.robot.commands.unusedCommands.TwoBallsAuto;
+import frc.robot.commands.unusedCommands.AutoTwoBallWall;
 import frc.robot.subsystems.SecondLift;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.driveSubsystem;
@@ -69,9 +71,17 @@ public class RobotContainer {
 
   private final Command m_twoBallAuto =
     new AutoTwoBall(1.5, AutoConstants.kAutoDriveSpeed, a_robotDrive, a_arm, a_rollerIntake, a_transition, a_shooter);
+
+  private final Command m_twoBallWallAuto =
+    new AutoTwoBallWall(1.5, AutoConstants.kAutoDriveSpeed, a_robotDrive, a_arm, a_rollerIntake, a_transition, a_shooter);  
   
   private final Command m_threeBallAuto = 
-    new AutoThreeBall(1.5, AutoConstants.kAutoDriveSpeed, a_robotDrive, a_arm, a_rollerIntake, a_transition, a_shooter); 
+    new AutoThreeBall(1.5, AutoConstants.kAutoDriveSpeed, a_robotDrive, a_arm, a_rollerIntake, a_transition, a_shooter);
+  private final Command m_beastMode = 
+    new beastMode(5.5, -.6, a_robotDrive, a_arm, a_rollerIntake, a_transition, a_shooter);
+
+  private final Command m_PATHthreeBall =
+    new ThreeBallPath(a_robotDrive, a_shooter, a_transition, a_arm, a_rollerIntake);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -105,20 +115,16 @@ public class RobotContainer {
       a_robotDrive.displayEncoderValues();
 
     //Auto Choices
-    autoChooser.setDefaultOption("Simple Auto", m_simpleAuto);
+    autoChooser.setDefaultOption("One Ball",m_ShootCloseDrive);
     autoChooser.addOption("Shoot Low", a_ShootLowThenDrive);
-    autoChooser.addOption("One Ball",m_ShootCloseDrive);
+    autoChooser.addOption("Simple Auto", m_simpleAuto);
     autoChooser.addOption("Two Ball", m_twoBallAuto);
+    autoChooser.addOption("Two Ball Wall", m_twoBallWallAuto);
     autoChooser.addOption("Three Ball", m_threeBallAuto);
-
-    //autoChooser.addOption("Three Balls", getPathweaverCommand(0));
-    // autoChooser.addOption("Two Ball", getPathweaverCommand(1));
-    //autoChooser.addOption("Straight", getPathweaverCommand(0));
+    autoChooser.addOption("PATH three ball", m_PATHthreeBall);
+    autoChooser.addOption("Beast Mode", m_beastMode);
 
     Shuffleboard.getTab("Autonomous").add(autoChooser);
-
-    // Changing Path weaver 
-    // autoChooser.addOption("M&A_PathWeaver Test",getPathweaverCommand(0));
 
   }
 
@@ -196,67 +202,6 @@ public class RobotContainer {
     .whenPressed(new turnSimple(a_robotDrive, 90, true));
 
   }
-//   public Command getPathweaverCommand(int json){
-
-//     String[] trajectoryJSON =
-//     {//"output/threeBall.wpilib.json",
-//       //"output/sPath.wpilib.json",
-//       "output/Straight.wpilib.json",
-//       "output/twoBall.wpilib.json"
-//     };
-// /*
-//     // Create a voltage constraint to ensure we don't accelerate too fast
-//     var autoVoltageConstraint =
-//         new DifferentialDriveVoltageConstraint(
-//             new SimpleMotorFeedforward(
-//                 DriveConstants.asVolts,
-//                 DriveConstants.avVoltSecondsPerMeter,
-//                 DriveConstants.aaVoltSecondsSquaredPerMeter),
-//             DriveConstants.kDriveKinematics,
-//             10);
-
-//     // Create config for trajectory
-//     TrajectoryConfig config =
-//         new TrajectoryConfig(
-//                 AutoConstants.kMaxSpeedMetersPerSecond,
-//                 AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-//             // Add kinematics to ensure max speed is actually obeyed
-//             .setKinematics(DriveConstants.kDriveKinematics)
-//             // Apply the voltage constraint
-//             .addConstraint(autoVoltageConstraint);
-// */
-
-//     Trajectory trajectory = new Trajectory();
-
-//     try{
-//         Path pathTrajectory = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON[json]);
-//         trajectory = TrajectoryUtil.fromPathweaverJson(pathTrajectory);
-//     } catch (IOException ex) {
-//       DriverStation.reportError("Unable to open one or more trajectories",  ex.getStackTrace());
-//     }
-
-//     RamseteCommand ramseteCommand =
-//         new RamseteCommand(
-//             trajectory,
-//             a_robotDrive::getPose,
-//             new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
-//             new SimpleMotorFeedforward(
-//                 DriveConstants.asVolts,
-//                 DriveConstants.avVoltSecondsPerMeter,
-//                 DriveConstants.aaVoltSecondsSquaredPerMeter),
-//             DriveConstants.kDriveKinematics,
-//             a_robotDrive::getWheelSpeeds,
-//             new PIDController(DriveConstants.aPDriveVel, 0, 0),
-//             new PIDController(DriveConstants.aPDriveVel, 0, 0),
-//             // RamseteCommand passes volts to the callback
-//             a_robotDrive::tankDriveVolts,
-//             a_robotDrive);
-
-//     //reset odometry
-//     a_robotDrive.resetOdometry(trajectory.getInitialPose());
-
-//     return ramseteCommand.andThen(() -> a_robotDrive.tankDriveVolts(0, 0));
-//   }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -264,7 +209,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
+    // Get autonomous command from chooser
     return autoChooser.getSelected();
   }
 }

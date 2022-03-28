@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.unusedCommands;
+package frc.robot.commands;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -14,14 +14,12 @@ import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SpeedConstants;
-import frc.robot.commands.ArmControlDown;
-import frc.robot.commands.ArmControlUp;
-import frc.robot.commands.ShootThenDrive;
-import frc.robot.commands.ShootTimeCommand;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.driveSubsystem;
 import frc.robot.subsystems.intakeSubsystem;
@@ -31,14 +29,12 @@ import frc.robot.subsystems.transitionSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TwoBallsAuto extends SequentialCommandGroup {
-  /** Creates a new ShootThenPathweaver. */
-
+public class ThreeBallPath extends SequentialCommandGroup {
+  /** Creates a new ThreeBallPath. */
   Trajectory trajectory;
-  public TwoBallsAuto(driveSubsystem drivetrain, shooterSubsystem shooter, transitionSubsystem transition,
-  armSubsystem arm, intakeSubsystem intake,
-  double distance, double speed, double seconds) {
 
+  public ThreeBallPath(driveSubsystem drivetrain, shooterSubsystem shooter, transitionSubsystem transition,
+  armSubsystem arm, intakeSubsystem intake) {
     String myPathName = " ";
     String trajectoryFile = " ";
 
@@ -73,30 +69,19 @@ public class TwoBallsAuto extends SequentialCommandGroup {
       drivetrain::tankDriveVolts,
       drivetrain);
 
-
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
-    /*
-    addCommands(
-      new ShootThenDrive(drivetrain, shooter, transition, distance, speed, seconds, flapper, flapperType, upDown),
-      ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0,0))
-    );
-    */
-
     addCommands(
       new ShootTimeCommand(SpeedConstants.aHighCloseShootSpeed, AutoConstants.transitionTime, shooter, transition)
-      .andThen(() -> drivetrain.resetOdometry(trajectory.getInitialPose())),
-      new ArmControlDown(arm)
+      .alongWith(new ArmControlDown(arm))
+      .andThen(() -> drivetrain.resetOdometry(trajectory.getInitialPose()))
       .andThen(() -> intake.intakeRun(SpeedConstants.aRollerSpeed)),
-      //.andThen(() -> transition.transitionRun(0.3)),
-      ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0,0)),
-      new ArmControlUp(arm)
-      .andThen(() -> intake.intakeRun(0.0)),
-      new ShootTimeCommand(0.39, seconds, shooter, transition)
+      ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0,0))
+      .andThen(() -> shooter.shooterRun(SpeedConstants.aHighShootSpeed)),
+      new RunCommand(() -> transition.transitionRun(SpeedConstants.aTransitionSpeedAuto))
+      .raceWith(new WaitCommand(3)),
+      new RunCommand(() -> shooter.shooterRun(0.0))
+      .beforeStarting(() -> intake.intakeRun(0.0))
+      .beforeStarting(() -> transition.transitionRun(0.0))
     );
     
   }
 }
-
-
-  
