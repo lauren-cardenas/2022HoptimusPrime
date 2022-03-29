@@ -4,22 +4,26 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.SpeedConstants;
+import edu.wpi.first.wpilibj.SPI;
+
 
 public class driveSubsystem extends SubsystemBase {
   /** Creates a new driveSubsystem. */
@@ -31,14 +35,16 @@ public class driveSubsystem extends SubsystemBase {
   private final MotorControllerGroup a_leftMotors = new MotorControllerGroup(a_frontLeft, a_backLeft);
   private final MotorControllerGroup a_rightMotors = new MotorControllerGroup(a_frontRight, a_backRight);
 
-  private final Gyro a_gyro = new AHRS();
+  private final Gyro a_gyro = new AHRS(SPI.Port.kMXP);
 
   private DifferentialDriveOdometry a_odometry;
+
 
   //create drive boom
   private final DifferentialDrive a_drive = new DifferentialDrive(a_leftMotors,a_rightMotors);
   public driveSubsystem() {
     a_rightMotors.setInverted(true);
+
     
 
     a_frontLeft.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,0,0);
@@ -46,10 +52,10 @@ public class driveSubsystem extends SubsystemBase {
     a_frontRight.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,0,0);
     a_backRight.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,0,0);
 
-    a_frontLeft.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit/2, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
-    a_frontRight.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit/2, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
-    a_backLeft.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit/2, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
-    a_backRight.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit/2, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
+    a_frontLeft.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
+    a_frontRight.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
+    a_backLeft.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
+    a_backRight.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
 
     // a_frontLeft.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold, DriveConstants.aTriggerTime));
     // a_frontRight.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold, DriveConstants.aTriggerTime));
@@ -64,13 +70,16 @@ public class driveSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     a_odometry.update(
-      //a_gyro.getRotation2d(), a_leftEncoder.getDistance(), m_rightEncoder.getDistance());
-      a_gyro.getRotation2d(), a_frontLeft.getSelectedSensorPosition(), a_frontRight.getSelectedSensorPosition());
+      a_gyro.getRotation2d(), getLeftWheelPosition(), getRightWheelPosition());
   }
 
   public void arcadeDrive(double fwd, double rot) {
     a_drive.arcadeDrive(fwd, rot);
     displayEncoderValues();
+  }
+
+  public void tankDrive(double left, double right){
+    a_drive.tankDrive(left, right);
   }
 
   private double getLeftWheelSpeed(){
@@ -80,11 +89,15 @@ public class driveSubsystem extends SubsystemBase {
   private double getRightWheelSpeed(){
     return a_frontRight.getSelectedSensorVelocity() * DriveConstants.Conversion;
   }
+
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(getLeftWheelSpeed(), getRightWheelSpeed());
   }
+  
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
+    zeroHeading();
+    a_odometry.resetPosition(pose, a_gyro.getRotation2d());
   }
   public Pose2d getPose() {
     return a_odometry.getPoseMeters();
@@ -100,7 +113,7 @@ public class driveSubsystem extends SubsystemBase {
   }
   public void tankDriveVolts(double leftVolts, double rightVolts) {
     a_leftMotors.setVoltage(leftVolts);
-    a_rightMotors.setVoltage(-rightVolts);
+    a_rightMotors.setVoltage(rightVolts);
     a_drive.feed();
   }
 
@@ -133,10 +146,5 @@ public class driveSubsystem extends SubsystemBase {
   public void setMaxOutput(double maxOutput) {
     a_drive.setMaxOutput(maxOutput);
   }
-  public void setHalfSpeed(){
-    SpeedConstants.driveSpeed = 0.35;
-  }
-  public void setNormalSpeed(){
-    SpeedConstants.driveSpeed = 0.7;
-  }
+
 }

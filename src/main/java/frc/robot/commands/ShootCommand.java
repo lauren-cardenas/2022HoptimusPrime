@@ -5,16 +5,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.shooterSubsystem;
 import frc.robot.Constants.SpeedConstants;
-import frc.robot.subsystems.flapperSubsystem;
 
-public class flapperdown extends CommandBase {
-  /** Creates a new flapperdown. */
-  private final flapperSubsystem M_flapperDown;
-  public flapperdown(flapperSubsystem flappersub) {
+public class ShootCommand extends CommandBase {
+  private final shooterSubsystem m_shooter;
+  public ShootCommand(shooterSubsystem shootersub) {
+    m_shooter = shootersub;
+    addRequirements(m_shooter);
     // Use addRequirements() here to declare subsystem dependencies.
-    M_flapperDown = flappersub;
-    addRequirements(M_flapperDown);
   }
 
   // Called when the command is initially scheduled.
@@ -24,18 +23,18 @@ public class flapperdown extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    M_flapperDown.flapperRun(-SpeedConstants.aFlabberSpeed);
+    m_shooter.shooterRun(SpeedConstants.aHighCloseShootSpeed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    M_flapperDown.flapperRun(0.0);
+    m_shooter.shooterRun(0.0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return M_flapperDown.getstatusDownFlap() == false;
+    return false;
   }
 }

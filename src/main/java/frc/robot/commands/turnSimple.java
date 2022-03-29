@@ -5,48 +5,48 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.SpeedConstants;
-import frc.robot.subsystems.flapperSubsystem;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.subsystems.driveSubsystem;
 
-public class FlapperCommand extends CommandBase {
-  /** Creates a new FlapperCommand. */
-  private final flapperSubsystem flapper;
-  private final boolean m_direction;
-  private final int m_speed;
+public class turnSimple extends CommandBase {
+  /** Creates a new turnSimple. */
+  private final driveSubsystem drive;
+  private final int kAngle;
+  private final boolean kDirection;
 
-  public FlapperCommand(boolean direction, int speed, flapperSubsystem flapperSub) {
+  public turnSimple(driveSubsystem m_drive, int angle, boolean direction) {
     // Use addRequirements() here to declare subsystem dependencies.
-    flapper = flapperSub;
-    m_direction = direction;
-    m_speed = speed;
-    addRequirements(flapper);
+    drive = m_drive;
+    kAngle = angle;
+    kDirection = direction;
+    addRequirements(drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+    drive.zeroHeading();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    flapper.flapperRun(m_speed * SpeedConstants.aFlabberSpeed);
+    if(kDirection){
+      drive.arcadeDrive(0.0, AutoConstants.kAutoTurnSpeed);
+    } else{
+      drive.arcadeDrive(0.0, -AutoConstants.kAutoSlowTurnSpeed);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    flapper.flapperRun(0.0);
+    drive.arcadeDrive(0.0, 0.0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(m_direction == false){
-      return flapper.getstatusUpFlap() == false;
-    } else {
-      return flapper.getstatusDownFlap() == false;
-    }
+    return drive.getHeading() <= -kAngle;
   }
 }

@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MechConstants;
@@ -28,7 +27,7 @@ public class liftSubsystem extends SubsystemBase {
   }
 
   public void liftRun(double speed){
-    a_lift.set(speed);
+    a_lift.set(-speed);
   }
 
   public void winchRun(double speed){

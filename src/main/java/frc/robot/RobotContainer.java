@@ -4,45 +4,36 @@
 
 package frc.robot;
 
-import java.io.IOException;
-import java.nio.file.Path;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.DriverButtons;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.OperatorButtons;
 import frc.robot.Constants.SpeedConstants;
 import frc.robot.commands.ArmControlDown;
 import frc.robot.commands.ArmControlUp;
-//import frc.robot.commands.ArmDownIntakeOn;
+import frc.robot.commands.AutoThreeBall;
+import frc.robot.commands.AutoTwoBall;
 import frc.robot.commands.DriveTimeCommand;
 import frc.robot.commands.ShootThenDrive;
-import frc.robot.commands.flapperdown;
-import frc.robot.commands.flapperup;
-import frc.robot.commands.winchgo;
+import frc.robot.commands.ThreeBallPath;
+import frc.robot.commands.beastMode;
+import frc.robot.commands.turnSimple;
+import frc.robot.commands.unusedCommands.AutoTwoBallWall;
+import frc.robot.subsystems.SecondLift;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.driveSubsystem;
-import frc.robot.subsystems.flapperSubsystem;
 import frc.robot.subsystems.intakeSubsystem;
 import frc.robot.subsystems.liftSubsystem;
 import frc.robot.subsystems.shooterSubsystem;
 import frc.robot.subsystems.transitionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -60,8 +51,8 @@ public class RobotContainer {
   private final intakeSubsystem a_rollerIntake = new intakeSubsystem();
   private final armSubsystem a_arm = new armSubsystem();
   private final transitionSubsystem a_transition = new transitionSubsystem();
-  private final flapperSubsystem a_flabber = new flapperSubsystem();
   private final liftSubsystem a_lift = new liftSubsystem();
+  private final SecondLift a_sSecondLift = new SecondLift();
 
   XboxController a_driverController = new XboxController(OIConstants.aDriverControllerPort);
   XboxController a_operatorController = new XboxController(OIConstants.aOperatorControllerPort);
@@ -71,15 +62,26 @@ public class RobotContainer {
   private final Command m_simpleAuto =
     new DriveTimeCommand(
       AutoConstants.kAutoDriveTime, AutoConstants.kAutoDriveSpeed, a_robotDrive);
-
-  private final Command m_ShootThenDrive = 
-    new ShootThenDrive(a_robotDrive, a_shooter, a_transition, AutoConstants.shootHighDistance, SpeedConstants.aHighShootSpeed, 3, a_flabber, false, 1);
   
+  private final Command m_ShootCloseDrive =
+    new ShootThenDrive(a_robotDrive, a_shooter, a_transition, AutoConstants.shootHighDistance, SpeedConstants.aHighCloseShootSpeed,AutoConstants.transitionTime);
     
   private final Command a_ShootLowThenDrive = 
-    new ShootThenDrive(a_robotDrive, a_shooter, a_transition, AutoConstants.shootLowDistance, SpeedConstants.aLowShootSpeed, AutoConstants.transitionTime, a_flabber, true, -1);
-  
+    new ShootThenDrive(a_robotDrive, a_shooter, a_transition, AutoConstants.shootLowDistance, SpeedConstants.aLowShootSpeed, AutoConstants.transitionTime );
 
+  private final Command m_twoBallAuto =
+    new AutoTwoBall(1.5, AutoConstants.kAutoDriveSpeed, a_robotDrive, a_arm, a_rollerIntake, a_transition, a_shooter);
+
+  private final Command m_twoBallWallAuto =
+    new AutoTwoBallWall(1.5, AutoConstants.kAutoDriveSpeed, a_robotDrive, a_arm, a_rollerIntake, a_transition, a_shooter);  
+  
+  private final Command m_threeBallAuto = 
+    new AutoThreeBall(1.5, AutoConstants.kAutoDriveSpeed, a_robotDrive, a_arm, a_rollerIntake, a_transition, a_shooter);
+  private final Command m_beastMode = 
+    new beastMode(5.5, -.6, a_robotDrive, a_arm, a_rollerIntake, a_transition, a_shooter);
+
+  private final Command m_PATHthreeBall =
+    new ThreeBallPath(a_robotDrive, a_shooter, a_transition, a_arm, a_rollerIntake);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -88,27 +90,41 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
+    // Driver Controller Driving
+    /*
     a_robotDrive.setDefaultCommand(
       new RunCommand(() -> a_robotDrive.arcadeDrive(
         (a_driverController.getRightTriggerAxis()
            - a_driverController.getLeftTriggerAxis())* SpeedConstants.driveSpeed,
         a_driverController.getLeftX() * SpeedConstants.MturnSpeed
       ), a_robotDrive));
+    */
+
+      // Operator Controller Driving 
+      a_robotDrive.setDefaultCommand(
+        new RunCommand(() -> a_robotDrive.arcadeDrive(
+          (a_operatorController.getRightTriggerAxis()
+             - a_operatorController.getLeftTriggerAxis()),//* SpeedConstants.driveSpeed,
+          a_operatorController.getLeftX() * SpeedConstants.MturnSpeed
+        ), a_robotDrive));
+
+      
   
       // Must be there
       SmartDashboard.putData(a_robotDrive);
       a_robotDrive.displayEncoderValues();
 
     //Auto Choices
-    autoChooser.setDefaultOption("Simple Auto", m_simpleAuto);
-    autoChooser.setDefaultOption("shoot then drive", m_ShootThenDrive);
-    autoChooser.setDefaultOption("Shoot Low", a_ShootLowThenDrive);
+    autoChooser.setDefaultOption("One Ball",m_ShootCloseDrive);
+    autoChooser.addOption("Shoot Low", a_ShootLowThenDrive);
+    autoChooser.addOption("Simple Auto", m_simpleAuto);
+    autoChooser.addOption("Two Ball", m_twoBallAuto);
+    autoChooser.addOption("Two Ball Wall", m_twoBallWallAuto);
+    autoChooser.addOption("Three Ball", m_threeBallAuto);
+    autoChooser.addOption("PATH three ball", m_PATHthreeBall);
+    autoChooser.addOption("Beast Mode", m_beastMode);
 
-    autoChooser.addOption("Three Balls", getPathweaverCommand(0));
     Shuffleboard.getTab("Autonomous").add(autoChooser);
-
-    // Changing Path weaver 
-    // autoChooser.addOption("M&A_PathWeaver Test",getPathweaverCommand(0));
 
   }
 
@@ -117,6 +133,7 @@ public class RobotContainer {
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   * @param Button 
    */
   private void configureButtonBindings() {
 
@@ -127,22 +144,26 @@ public class RobotContainer {
       new JoystickButton(a_driverController, DriverButtons.bLiftRun)
       .whenPressed(() -> a_lift.liftRun(-SpeedConstants.aLiftSpeed))
       .whenReleased(() -> a_lift.liftRun(0.0));
-  
-      // new JoystickButton(a_driverController, DriverButtons.bWinchRun)
-      // .whenPressed(() -> a_lift.winchRun(-SpeedConstants.aWinchSpeed))
-      // .whenReleased(() -> a_lift.winchRun(0.0));
+
+      new JoystickButton(a_driverController, DriverButtons.bLiftback)
+      .whenPressed(() -> a_lift.liftRun(SpeedConstants.aLiftSpeed))
+      .whenReleased(() -> a_lift.liftRun(0.0));
 
       new JoystickButton(a_driverController, DriverButtons.bWinchRun)
-      .whenPressed(new winchgo(a_lift))
+      .whenPressed(() -> a_lift.winchRun(-SpeedConstants.aWinchSpeed))
       .whenReleased(() -> a_lift.winchRun(0.0));
-
-      // new JoystickButton(a_driverController, Button.kY.value)
-      // .whenPressed(() -> a_lift.liftRun(SpeedConstants.aLiftSpeed))
-      // .whenReleased(() -> a_lift.liftRun(0.0));
 
       new JoystickButton(a_driverController, DriverButtons.bWinchBack)
       .whenPressed(() -> a_lift.winchRun(SpeedConstants.aWinchSpeed))
       .whenReleased(() -> a_lift.winchRun(0.0));
+
+      new JoystickButton(a_driverController, DriverButtons.bSecondLiftUp)
+      .whenPressed(() -> a_sSecondLift.secondLift(SpeedConstants.aSecondLiftSpeed))
+      .whenReleased(() -> a_sSecondLift.secondLift(0.0));
+
+      new JoystickButton(a_driverController, DriverButtons.bSecondLiftDown)
+      .whenPressed(() -> a_sSecondLift.secondLift(-SpeedConstants.aSecondLiftSpeed))
+      .whenReleased(() -> a_sSecondLift.secondLift(0.0));
     
 
     //*************operator****************//
@@ -150,12 +171,12 @@ public class RobotContainer {
     //Shooter (High)
     new POVButton(a_operatorController, 0)
     .whenPressed(() -> a_shooter.shooterRun(SpeedConstants.aHighShootSpeed))
-    .whenReleased(() -> a_shooter.shooterRun(0.0));
+    .whenReleased(() -> a_shooter.shooterRun(0.0));//changed
 
     //Shooter (Low)
     new POVButton(a_operatorController, 180)
     .whenPressed(() -> a_shooter.shooterRun(SpeedConstants.aLowShootSpeed))
-    .whenReleased(() -> a_shooter.shooterRun(0.0));
+    .whenReleased(() -> a_shooter.shooterRun(0.0));//changed
 
     new JoystickButton(a_operatorController, OperatorButtons.bIntakeRun)
     .whenPressed(() -> a_rollerIntake.intakeRun(SpeedConstants.aRollerSpeed))
@@ -169,60 +190,17 @@ public class RobotContainer {
     .whenPressed(new ArmControlDown(a_arm))
     .whenReleased(() -> a_arm.intakeArmStop());
 
-    // new JoystickButton(a_operatorController, OperatorButtons.bFlapperdown)
-    // .whenPressed(() -> a_flabber.flapperRun(SpeedConstants.aFlabberSpeed))
-    // .whenReleased(() -> a_flabber.flapperRun(0.0));
+    new JoystickButton(a_operatorController, OperatorButtons.bHalfSpeed)
+    .whenPressed(() -> a_robotDrive.setMaxOutput(0.5))
+    .whenReleased(() -> a_robotDrive.setMaxOutput(0.9));
 
-    // new JoystickButton(a_operatorController, OperatorButtons.bFlapperup)
-    // .whenPressed(() -> a_flabber.flapperRun(SpeedConstants.aFlabberSpeed))
-    // .whenReleased(() -> a_flabber.flapperRun(0.0));
+    new JoystickButton(a_operatorController, OperatorButtons.bFullSpeed)
+    .whenPressed(() -> a_robotDrive.setMaxOutput(1.0))
+    .whenReleased(() -> a_robotDrive.setMaxOutput(0.9));
 
-    new JoystickButton(a_operatorController, OperatorButtons.bFlapperdown)
-    .whenPressed(new flapperdown(a_flabber))
-    .whenReleased(() -> a_flabber.flapperRun(0.0));
+    new JoystickButton(a_operatorController, OperatorButtons.bTurn)
+    .whenPressed(new turnSimple(a_robotDrive, 90, true));
 
-    new JoystickButton(a_operatorController, OperatorButtons.bFlapperup)
-    .whenPressed(new flapperup(a_flabber))
-    .whenReleased(() -> a_flabber.flapperRun(0.0));
-
-  //  ?w RunCommand(() -> a_transition.transitionRun(-a_operatorCo?ntroller.getRightY()*SpeedConstants.aTransitionSpeed),a_transition));
-  }
-  public Command getPathweaverCommand(int json){
-
-    String[] trajectoryJSON =
-    {"output/threeBall.wpilib.json"
-    };
-
-    Trajectory trajectory = new Trajectory();
-
-    try{
-        Path pathTrajectory = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON[json]);
-        trajectory = TrajectoryUtil.fromPathweaverJson(pathTrajectory);
-    } catch (IOException ex) {
-      DriverStation.reportError("Unable to open one or more trajectories",  ex.getStackTrace());
-    }
-
-    RamseteCommand ramseteCommand =
-        new RamseteCommand(
-            trajectory,
-            a_robotDrive::getPose,
-            new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
-            new SimpleMotorFeedforward(
-                DriveConstants.asVolts,
-                DriveConstants.avVoltSecondsPerMeter,
-                DriveConstants.aaVoltSecondsSquaredPerMeter),
-            DriveConstants.kDriveKinematics,
-            a_robotDrive::getWheelSpeeds,
-            new PIDController(DriveConstants.aPDriveVel, 0, 0),
-            new PIDController(DriveConstants.aPDriveVel, 0, 0),
-            // RamseteCommand passes volts to the callback
-            a_robotDrive::tankDriveVolts,
-            a_robotDrive);
-
-    //reset odometry
-    a_robotDrive.resetOdometry(trajectory.getInitialPose());
-
-    return ramseteCommand.andThen(() -> a_robotDrive.tankDriveVolts(0, 0));
   }
 
   /**
@@ -231,7 +209,24 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
+    // Get autonomous command from chooser
     return autoChooser.getSelected();
   }
 }
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+

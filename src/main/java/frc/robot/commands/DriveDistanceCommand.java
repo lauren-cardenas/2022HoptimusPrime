@@ -43,6 +43,10 @@ public class DriveDistanceCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(Math.signum(m_distance) == 1){
     return Math.abs(m_drive.getAverageEncoderDistance()) >= m_distance;
+    } else{
+    return (m_drive.getAverageEncoderDistance()) <= m_distance;
+    }
   }
 }
