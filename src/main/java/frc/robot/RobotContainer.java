@@ -26,7 +26,6 @@ import frc.robot.commands.ThreeBallPath;
 import frc.robot.commands.beastMode;
 import frc.robot.commands.turnSimple;
 import frc.robot.commands.unusedCommands.AutoTwoBallWall;
-import frc.robot.subsystems.SecondLift;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.driveSubsystem;
 import frc.robot.subsystems.intakeSubsystem;
@@ -52,7 +51,6 @@ public class RobotContainer {
   private final armSubsystem a_arm = new armSubsystem();
   private final transitionSubsystem a_transition = new transitionSubsystem();
   private final liftSubsystem a_lift = new liftSubsystem();
-  private final SecondLift a_sSecondLift = new SecondLift();
 
   XboxController a_driverController = new XboxController(OIConstants.aDriverControllerPort);
   XboxController a_operatorController = new XboxController(OIConstants.aOperatorControllerPort);
@@ -141,6 +139,7 @@ public class RobotContainer {
     a_transition.setDefaultCommand(
       new RunCommand(() -> a_transition.transitionRun((-a_driverController.getRightY()+(-a_operatorController.getRightY()))*SpeedConstants.aTransitionSpeed),a_transition));
 
+      // 
       new JoystickButton(a_driverController, DriverButtons.bLiftRun)
       .whenPressed(() -> a_lift.liftRun(-SpeedConstants.aLiftSpeed))
       .whenReleased(() -> a_lift.liftRun(0.0));
@@ -157,26 +156,21 @@ public class RobotContainer {
       .whenPressed(() -> a_lift.winchRun(SpeedConstants.aWinchSpeed))
       .whenReleased(() -> a_lift.winchRun(0.0));
 
-      new JoystickButton(a_driverController, DriverButtons.bSecondLiftUp)
-      .whenPressed(() -> a_sSecondLift.secondLift(SpeedConstants.aSecondLiftSpeed))
-      .whenReleased(() -> a_sSecondLift.secondLift(0.0));
-
-      new JoystickButton(a_driverController, DriverButtons.bSecondLiftDown)
-      .whenPressed(() -> a_sSecondLift.secondLift(-SpeedConstants.aSecondLiftSpeed))
-      .whenReleased(() -> a_sSecondLift.secondLift(0.0));
     
-
-    //*************operator****************//
-
     //Shooter (High)
-    new POVButton(a_operatorController, 0)
+    new POVButton(a_driverController, 0)
     .whenPressed(() -> a_shooter.shooterRun(SpeedConstants.aHighShootSpeed))
     .whenReleased(() -> a_shooter.shooterRun(0.0));//changed
 
     //Shooter (Low)
-    new POVButton(a_operatorController, 180)
+    new POVButton(a_driverController, 180)
     .whenPressed(() -> a_shooter.shooterRun(SpeedConstants.aLowShootSpeed))
     .whenReleased(() -> a_shooter.shooterRun(0.0));//changed
+    
+
+    //*************operator****************//
+
+    
 
     new JoystickButton(a_operatorController, OperatorButtons.bIntakeRun)
     .whenPressed(() -> a_rollerIntake.intakeRun(SpeedConstants.aRollerSpeed))
@@ -199,7 +193,8 @@ public class RobotContainer {
     .whenReleased(() -> a_robotDrive.setMaxOutput(0.9));
 
     new JoystickButton(a_operatorController, OperatorButtons.bTurn)
-    .whenPressed(new turnSimple(a_robotDrive, 90, true));
+    .whenPressed(() -> a_rollerIntake.intakeRun(-SpeedConstants.aRollerSpeed))
+    .whenReleased(() -> a_rollerIntake.intakeRun(0.0));
 
   }
 
