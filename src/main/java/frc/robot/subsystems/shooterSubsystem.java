@@ -5,6 +5,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MechConstants;
 
@@ -23,5 +25,10 @@ public class shooterSubsystem extends SubsystemBase {
 
   public void shooterRun(double speed){   
     a_shooter.set(-speed);
+  }
+
+  public void displayEncoderValues(){
+    SmartDashboard.putNumber("Shooter Speed", 
+      a_shooter.getSelectedSensorVelocity());
   }
 }

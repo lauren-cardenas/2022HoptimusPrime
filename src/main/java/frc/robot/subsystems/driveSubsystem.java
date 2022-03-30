@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -44,7 +45,6 @@ public class driveSubsystem extends SubsystemBase {
   private final DifferentialDrive a_drive = new DifferentialDrive(a_leftMotors,a_rightMotors);
   public driveSubsystem() {
     a_rightMotors.setInverted(true);
-
     
 
     a_frontLeft.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,0,0);
@@ -57,10 +57,10 @@ public class driveSubsystem extends SubsystemBase {
     a_backLeft.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
     a_backRight.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
 
-    // a_frontLeft.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold, DriveConstants.aTriggerTime));
-    // a_frontRight.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold, DriveConstants.aTriggerTime));
-    // a_backLeft.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold, DriveConstants.aTriggerTime));
-    // a_backRight.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold, DriveConstants.aTriggerTime));
+    //a_frontLeft.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold, DriveConstants.aTriggerTime));
+    //a_frontRight.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold, DriveConstants.aTriggerTime));
+    //a_backLeft.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold, DriveConstants.aTriggerTime));
+    //a_backRight.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold, DriveConstants.aTriggerTime));
 
     a_gyro.reset();
     a_odometry = new DifferentialDriveOdometry(a_gyro.getRotation2d());

@@ -14,6 +14,7 @@ public class transitionSubsystem extends SubsystemBase {
 
   public transitionSubsystem() {
     a_transition = new WPI_VictorSPX(MechConstants.aTransitionPort);
+    a_transition.setSafetyEnabled(false);
   }
 
   @Override

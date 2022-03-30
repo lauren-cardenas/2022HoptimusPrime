@@ -1,0 +1,15 @@
+{
+  "LiveWindow": {
+    "open": true
+  },
+  "NetworkTables Settings": {
+    "mode": "Client",
+    "serverTeam": "4063"
+  },
+  "SmartDashboard": {
+    "driveSubsystem": {
+      "open": true
+    },
+    "open": true
+  }
+}

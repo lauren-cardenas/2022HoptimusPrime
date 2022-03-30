@@ -43,7 +43,7 @@ public final class Constants {
         public static final int aRightDrivePort1 = 4;
         public static final int aRightDrivePort2 = 5;
 
-        public static final double aTrackwidthMeters = 0.7115; //0.48; //1.1;
+        public static final double aTrackwidthMeters = 0.6; //0.48; //1.1;
         public static final DifferentialDriveKinematics kDriveKinematics =
             new DifferentialDriveKinematics(aTrackwidthMeters);
 
@@ -58,17 +58,18 @@ public final class Constants {
             aWheelDiameterMeters * Math.PI /
                 (aGearRatio * aEncoderCPR);
 
-        public static final double asVolts = 0.49819; //0.61601; //0.60903;
-        public static final double avVoltSecondsPerMeter = 2.38; //2.443; //0.062107;
-        public static final double aaVoltSecondsSquaredPerMeter = 0.59487; //0.34883; //0.0087418;
+        public static final double asVolts = 0.61242; //0.49819; //0.61601; //0.60903;
+        public static final double avVoltSecondsPerMeter = 2.4015; //2.38; //2.443; //0.062107;
+        public static final double aaVoltSecondsSquaredPerMeter = 0.46993; //0.59487; //0.34883; //0.0087418;
 
-        public static final double aPDriveVel = 2.6116; //19.916; //2.4169; //maybe 3.3387; //0.0044096; //0.084576;
+        public static final double aPDriveVel = 1;
+        //3.4583; //2.6116; //19.916; //2.4169; //maybe 3.3387; //0.0044096; //0.084576;
 
         // Falcon Tolerance
 
         public static final int aAmpLimit = 30;
         public static final int aTriggerThreshold = 25;
-        public static final double aTriggerTime = 1.0;
+        public static final double aTriggerTime = 1;
 
         // Gyro Turn Auto
         public static final double kTurnP = 0.062614;

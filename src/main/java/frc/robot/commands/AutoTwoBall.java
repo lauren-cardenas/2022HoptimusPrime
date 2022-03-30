@@ -31,6 +31,7 @@ public class AutoTwoBall extends SequentialCommandGroup {
       new DriveDistanceCommand(-1.45, -robotSpeed, drive)
       .beforeStarting(() -> intake.intakeRun(0.0)),
       new turnSimple(drive, 156, true)
+      .beforeStarting(() -> drive.zeroHeading())
       .beforeStarting(() -> shoot.shooterRun(SpeedConstants.aHighShootSpeed)),
       new RunCommand(() -> transition.transitionRun(SpeedConstants.aTransitionSpeedAuto))
       //new ShootTimeCommand(SpeedConstants.aHighCloseShootSpeed, 0.25, shoot, transition)

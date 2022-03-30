@@ -8,7 +8,6 @@ package frc.robot;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
@@ -24,7 +23,6 @@ import frc.robot.commands.DriveTimeCommand;
 import frc.robot.commands.ShootThenDrive;
 import frc.robot.commands.ThreeBallPath;
 import frc.robot.commands.beastMode;
-import frc.robot.commands.turnSimple;
 import frc.robot.commands.unusedCommands.AutoTwoBallWall;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.driveSubsystem;
@@ -74,7 +72,7 @@ public class RobotContainer {
     new AutoTwoBallWall(1.5, AutoConstants.kAutoDriveSpeed, a_robotDrive, a_arm, a_rollerIntake, a_transition, a_shooter);  
   
   private final Command m_threeBallAuto = 
-    new AutoThreeBall(1.5, AutoConstants.kAutoDriveSpeed, a_robotDrive, a_arm, a_rollerIntake, a_transition, a_shooter);
+    new AutoThreeBall(1.5, AutoConstants.kAutoDriveSpeed - 0.05, a_robotDrive, a_arm, a_rollerIntake, a_transition, a_shooter);
   private final Command m_beastMode = 
     new beastMode(5.5, -.6, a_robotDrive, a_arm, a_rollerIntake, a_transition, a_shooter);
 
@@ -111,6 +109,7 @@ public class RobotContainer {
       // Must be there
       SmartDashboard.putData(a_robotDrive);
       a_robotDrive.displayEncoderValues();
+      SmartDashboard.putData(a_shooter);
 
     //Auto Choices
     autoChooser.setDefaultOption("One Ball",m_ShootCloseDrive);
@@ -122,7 +121,8 @@ public class RobotContainer {
     autoChooser.addOption("PATH three ball", m_PATHthreeBall);
     autoChooser.addOption("Beast Mode", m_beastMode);
 
-    Shuffleboard.getTab("Autonomous").add(autoChooser);
+    //Shuffleboard.getTab("Autonomous").add(autoChooser);
+    SmartDashboard.putData("Autonomous", autoChooser);
 
   }
 

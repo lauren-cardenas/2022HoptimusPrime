@@ -25,7 +25,7 @@ public class turnSimple extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    drive.zeroHeading();
+    //drive.zeroHeading();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -34,7 +34,7 @@ public class turnSimple extends CommandBase {
     if(kDirection){
       drive.arcadeDrive(0.0, AutoConstants.kAutoTurnSpeed);
     } else{
-      drive.arcadeDrive(0.0, -AutoConstants.kAutoSlowTurnSpeed);
+      drive.arcadeDrive(0.0, -AutoConstants.kAutoTurnSpeed);
     }
   }
 
@@ -47,6 +47,10 @@ public class turnSimple extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return drive.getHeading() <= -kAngle;
+    if(kDirection){
+      return drive.getHeading() <= -kAngle;
+    } else{
+      return drive.getHeading() >= -kAngle;
+    }
   }
 }
