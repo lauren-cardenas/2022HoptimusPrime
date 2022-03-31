@@ -32,7 +32,7 @@ transitionSubsystem transition, shooterSubsystem shoot) {
       new DriveDistanceCommand(distance, robotSpeed, drive),
       new DriveDistanceCommand(-1.45, -robotSpeed, drive)
       .beforeStarting(() -> intake.intakeRun(0.0)),
-      new turnSimple(drive, 150, true),
+      new turnSimple(drive, 150, true, transition),
       new ShootTimeCommand(.37, 4, shoot, transition)
       .beforeStarting(() -> intake.intakeRun(SpeedConstants.aRollerSpeed)),
       new ShootTimeCommand(0, 0, shoot, transition)
