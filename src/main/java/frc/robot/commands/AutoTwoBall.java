@@ -28,9 +28,9 @@ public class AutoTwoBall extends SequentialCommandGroup {
       new ArmControlDown(arm)
       .beforeStarting(() -> intake.intakeRun(SpeedConstants.aRollerSpeed)),
       new DriveDistanceCommand(distance, robotSpeed, drive),
-      new DriveDistanceCommand(-1.45, -robotSpeed, drive)
+      new DriveDistanceCommand(1.45, -robotSpeed, drive)
       .beforeStarting(() -> intake.intakeRun(0.0)),
-      new turnSimple(drive, 156, true, transition)
+      new turnSimple(drive, -180, false, transition)
       .beforeStarting(() -> drive.zeroHeading())
       .beforeStarting(() -> shoot.shooterRun(SpeedConstants.aHighShootSpeed)),
       new RunCommand(() -> transition.transitionRun(SpeedConstants.aTransitionSpeedAuto))

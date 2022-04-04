@@ -45,17 +45,24 @@ public class driveSubsystem extends SubsystemBase {
   private final DifferentialDrive a_drive = new DifferentialDrive(a_leftMotors,a_rightMotors);
   public driveSubsystem() {
     a_rightMotors.setInverted(true);
+
+    a_drive.setSafetyEnabled(false);
+    a_drive.setMaxOutput(0.9);
     
 
-    a_frontLeft.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,0,0);
-    a_backLeft.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,0,0);
-    a_frontRight.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,0,0);
-    a_backRight.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,0,0);
+    //a_frontLeft.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,0,0);
+    //a_backLeft.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,0,0);
+    //a_frontRight.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,0,0);
+    //a_backRight.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,0,0);
 
-    a_frontLeft.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
-    a_frontRight.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
-    a_backLeft.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
-    a_backRight.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
+    a_frontLeft.configFactoryDefault();
+    a_frontRight.configFactoryDefault();
+    a_backLeft.configFactoryDefault();
+    a_backRight.configFactoryDefault();
+    //a_frontLeft.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
+    //a_frontRight.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
+    //a_backLeft.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
+    //a_backRight.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold-10, DriveConstants.aTriggerTime/2));
 
     //a_frontLeft.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold, DriveConstants.aTriggerTime));
     //a_frontRight.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, DriveConstants.aAmpLimit, DriveConstants.aTriggerThreshold, DriveConstants.aTriggerTime));

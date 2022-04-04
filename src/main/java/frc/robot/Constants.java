@@ -33,7 +33,7 @@ public final class Constants {
         public static final int bArmDown = Button.kA.value;
         public static final int bIntakeRun = Button.kX.value;
         public static final int bTurn = Button.kY.value;
-        public static final int bHalfSpeed = Button.kLeftBumper.value;
+       // public static final int bHalfSpeed = Button.kLeftBumper.value;
         public static final int bFullSpeed = Button.kRightBumper.value;
     }
     
@@ -67,7 +67,7 @@ public final class Constants {
 
         // Falcon Tolerance
 
-        public static final int aAmpLimit = 30;
+        public static final int aAmpLimit = 35;
         public static final int aTriggerThreshold = 25;
         public static final double aTriggerTime = 1;
 
@@ -128,14 +128,14 @@ public final class Constants {
     }
     public static final class SpeedConstants{
         public static final double MturnSpeed = 0.60000001;
-        public static final double driveSpeed = 0.9;
+        public static final double driveSpeed = 1.0;
         public static final double aArmSpeed = 1.0;
         public static final double aRollerSpeed = 0.7;
         public static final double aTransitionSpeed = 0.75;
         public static final double aHighShootSpeed = 0.37;
-        public static final double aLowShootSpeed = 0.475; // actually another high speed
+        public static final double aLowShootSpeed = 0.485; // actually another high speed //.475
         public static final double aHighCloseShootSpeed = 0.385;//0.37;
-        public static final double kFarShootSpeed = 0.47;
+        public static final double kFarShootSpeed = 0.5;
         public static final double aLiftSpeed = 0.85;
         public static final double aWinchSpeed = 1.0;
         public static final double aTransitionSpeedAuto = 1.0;

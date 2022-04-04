@@ -107,9 +107,9 @@ public class RobotContainer {
       
   
       // Must be there
-      SmartDashboard.putData(a_robotDrive);
-      a_robotDrive.displayEncoderValues();
-      SmartDashboard.putData(a_shooter);
+      //SmartDashboard.putData(a_robotDrive);
+      //a_robotDrive.displayEncoderValues();
+      //SmartDashboard.putData(a_shooter);
 
     //Auto Choices
     autoChooser.setDefaultOption("One Ball",m_ShootCloseDrive);
@@ -166,6 +166,10 @@ public class RobotContainer {
     new POVButton(a_driverController, 180)
     .whenPressed(() -> a_shooter.shooterRun(SpeedConstants.aLowShootSpeed))
     .whenReleased(() -> a_shooter.shooterRun(0.0));//changed
+
+    // new POVButton(a_driverController, 90)
+    // .whenPressed(() -> a_shooter.shooterRun(0.5))
+    // .whenReleased(() -> a_shooter.shooterRun(0.0));
     
 
     //*************operator****************//
@@ -184,13 +188,13 @@ public class RobotContainer {
     .whenPressed(new ArmControlDown(a_arm))
     .whenReleased(() -> a_arm.intakeArmStop());
 
-    new JoystickButton(a_operatorController, OperatorButtons.bHalfSpeed)
-    .whenPressed(() -> a_robotDrive.setMaxOutput(0.5))
-    .whenReleased(() -> a_robotDrive.setMaxOutput(0.9));
+    // new JoystickButton(a_operatorController, OperatorButtons.bHalfSpeed)
+    // .whenPressed(() -> a_robotDrive.setMaxOutput(0.5))
+    // .whenReleased(() -> a_robotDrive.setMaxOutput(0.9));
 
-    new JoystickButton(a_operatorController, OperatorButtons.bFullSpeed)
-    .whenPressed(() -> a_robotDrive.setMaxOutput(1.0))
-    .whenReleased(() -> a_robotDrive.setMaxOutput(0.9));
+     new JoystickButton(a_operatorController, OperatorButtons.bFullSpeed)
+     .whenPressed(() -> a_robotDrive.setMaxOutput(1.0))
+     .whenReleased(() -> a_robotDrive.setMaxOutput(0.9));
 
     new JoystickButton(a_operatorController, OperatorButtons.bTurn)
     .whenPressed(() -> a_rollerIntake.intakeRun(-SpeedConstants.aRollerSpeed))

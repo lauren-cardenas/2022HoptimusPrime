@@ -34,13 +34,13 @@ public class AutoThreeBall extends SequentialCommandGroup {
       .beforeStarting(() -> drive.zeroHeading())
       .beforeStarting(() -> shoot.shooterRun(SpeedConstants.aHighShootSpeed)),
       new RunCommand(() -> transition.transitionRun(SpeedConstants.aTransitionSpeedAuto))
-      .raceWith(new WaitCommand(1.5)),
+      .raceWith(new WaitCommand(1.6)),
      // new RunCommand(() -> transition.transitionRun(0.0)),
-      new turnSimple(drive, -93, false, transition)
+      new turnSimple(drive, -91, false, transition)
       .beforeStarting(() -> shoot.shooterRun(0.0)), //turn to third ball
       new DriveDistanceCommand(1.55, robotSpeed - 0.15, drive),
       new turnSimple(drive, 140, true, transition)
-      .beforeStarting(() -> shoot.shooterRun(0.45)), //turn to goal
+      .beforeStarting(() -> shoot.shooterRun(0.5)), //turn to goal
       new RunCommand(() -> transition.transitionRun(SpeedConstants.aTransitionSpeedAuto))
       .raceWith(new WaitCommand(1.5)),
       new RunCommand(() -> shoot.shooterRun(0), shoot)
