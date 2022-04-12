@@ -6,6 +6,7 @@ package frc.robot;
 
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -20,6 +21,7 @@ import frc.robot.commands.ArmControlUp;
 import frc.robot.commands.AutoThreeBall;
 import frc.robot.commands.AutoTwoBall;
 import frc.robot.commands.DriveTimeCommand;
+import frc.robot.commands.RAutoTwoBall;
 import frc.robot.commands.ShootThenDrive;
 import frc.robot.commands.ThreeBallPath;
 import frc.robot.commands.beastMode;
@@ -79,9 +81,17 @@ public class RobotContainer {
   private final Command m_PATHthreeBall =
     new ThreeBallPath(a_robotDrive, a_shooter, a_transition, a_arm, a_rollerIntake);
 
+  private final Command m_RtwoBallAuto = 
+    new RAutoTwoBall(1.5, AutoConstants.kAutoDriveSpeed, a_robotDrive, a_arm, a_rollerIntake, a_transition, a_shooter);
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-   CameraServer.startAutomaticCapture();
+  
+    // Camera related stuff
+   UsbCamera camera = CameraServer.startAutomaticCapture();
+   camera.setResolution(80, 45);
+   camera.setFPS(30);
+   
 
     // Configure the button bindings
     configureButtonBindings();
@@ -120,6 +130,7 @@ public class RobotContainer {
     autoChooser.addOption("Three Ball", m_threeBallAuto);
     autoChooser.addOption("PATH three ball", m_PATHthreeBall);
     autoChooser.addOption("Beast Mode", m_beastMode);
+    autoChooser.addOption("Right Two Ball", m_RtwoBallAuto);
 
     //Shuffleboard.getTab("Autonomous").add(autoChooser);
     SmartDashboard.putData("Autonomous", autoChooser);
