@@ -19,8 +19,8 @@ public final class Constants {
     public static final class DriverButtons{
         
         public static final int bLiftRun = Button.kA.value;
-        public static final int bWinchRun = Button.kB.value;
-        public static final int bWinchBack = Button.kY.value;
+        public static final int bWinchRun = Button.kY.value;
+        public static final int bWinchBack = Button.kB.value;
         public static final int bLiftback = Button.kX.value;
         public static final int bSecondLiftUp = Button.kRightBumper.value;
         public static final int bSecondLiftDown = Button.kLeftBumper.value;
@@ -33,7 +33,7 @@ public final class Constants {
         public static final int bArmDown = Button.kA.value;
         public static final int bIntakeRun = Button.kX.value;
         public static final int bTurn = Button.kY.value;
-       // public static final int bHalfSpeed = Button.kLeftBumper.value;
+        public static final int bHalfSpeed = Button.kLeftBumper.value;
         public static final int bFullSpeed = Button.kRightBumper.value;
     }
     
@@ -130,13 +130,14 @@ public final class Constants {
         public static final double MturnSpeed = 0.60000001;
         public static final double driveSpeed = 1.0;
         public static final double aArmSpeed = 1.0;
-        public static final double aRollerSpeed = 0.7;
+        public static final double aRollerSpeed = 1.0;
         public static final double aTransitionSpeed = 0.75;
         public static final double aHighShootSpeed = 0.37;
-        public static final double aLowShootSpeed = 0.485; // actually another high speed //.475
+        public static final double aHigherShootSpeed = 0.485; // actually another high speed //.475
         public static final double aHighCloseShootSpeed = 0.385;//0.37;
+        public static final double aAutoOneBallShootSpeed = 0.3675;
         public static final double kFarShootSpeed = 0.5;
-        public static final double aLiftSpeed = 0.85;
+        public static final double aLiftSpeed = 0.8;//.85
         public static final double aWinchSpeed = 1.0;
         public static final double aTransitionSpeedAuto = 1.0;
         public static final double aSecondLiftSpeed = 0.5;

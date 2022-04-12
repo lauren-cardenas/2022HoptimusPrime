@@ -24,11 +24,11 @@ public class AutoThreeBall extends SequentialCommandGroup {
     
     addCommands(
       //new ArmControlDown(arm)
-      new DriveDistanceCommand(0.8, robotSpeed - 0.15, drive)
+      new DriveDistanceCommand(0.8, robotSpeed - 0.15, drive)//.8
       .alongWith(new ArmControlDown(arm))
       .beforeStarting(() -> intake.intakeRun(SpeedConstants.aRollerSpeed)),
        //go to second ball
-      new DriveDistanceCommand(-0.8, -robotSpeed, drive) //backup to shoot
+      new DriveDistanceCommand(-0.8, -robotSpeed, drive) //backup to shoot .8
       .beforeStarting(() -> intake.intakeRun(0.4)),
       new turnSimple(drive, -155, false, transition) //turn to goal
       .beforeStarting(() -> drive.zeroHeading())
@@ -36,11 +36,11 @@ public class AutoThreeBall extends SequentialCommandGroup {
       new RunCommand(() -> transition.transitionRun(SpeedConstants.aTransitionSpeedAuto))
       .raceWith(new WaitCommand(1.6)),
      // new RunCommand(() -> transition.transitionRun(0.0)),
-      new turnSimple(drive, -91, false, transition)
+      new turnSimple(drive, -90, false, transition)
       .beforeStarting(() -> shoot.shooterRun(0.0)), //turn to third ball
-      new DriveDistanceCommand(1.55, robotSpeed - 0.15, drive),
-      new turnSimple(drive, 140, true, transition)
-      .beforeStarting(() -> shoot.shooterRun(0.5)), //turn to goal
+      new DriveDistanceCommand(1.75, robotSpeed - 0.15, drive), //1.55
+      new turnSimple(drive, 134, true, transition) //140
+      .beforeStarting(() -> shoot.shooterRun(0.475)), //turn to goal .5
       new RunCommand(() -> transition.transitionRun(SpeedConstants.aTransitionSpeedAuto))
       .raceWith(new WaitCommand(1.5)),
       new RunCommand(() -> shoot.shooterRun(0), shoot)

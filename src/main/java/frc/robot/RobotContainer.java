@@ -60,10 +60,10 @@ public class RobotContainer {
       AutoConstants.kAutoDriveTime, AutoConstants.kAutoDriveSpeed, a_robotDrive);
   
   private final Command m_ShootCloseDrive =
-    new ShootThenDrive(a_robotDrive, a_shooter, a_transition, AutoConstants.shootHighDistance, SpeedConstants.aHighCloseShootSpeed,AutoConstants.transitionTime);
+    new ShootThenDrive(a_robotDrive, a_shooter, a_transition, 1.5, SpeedConstants.aAutoOneBallShootSpeed,AutoConstants.transitionTime);
     
   private final Command a_ShootLowThenDrive = 
-    new ShootThenDrive(a_robotDrive, a_shooter, a_transition, AutoConstants.shootLowDistance, SpeedConstants.aLowShootSpeed, AutoConstants.transitionTime );
+    new ShootThenDrive(a_robotDrive, a_shooter, a_transition, AutoConstants.shootLowDistance, SpeedConstants.aHigherShootSpeed, AutoConstants.transitionTime );
 
   private final Command m_twoBallAuto =
     new AutoTwoBall(1.5, AutoConstants.kAutoDriveSpeed, a_robotDrive, a_arm, a_rollerIntake, a_transition, a_shooter);
@@ -164,7 +164,7 @@ public class RobotContainer {
 
     //Shooter (Low)
     new POVButton(a_driverController, 180)
-    .whenPressed(() -> a_shooter.shooterRun(SpeedConstants.aLowShootSpeed))
+    .whenPressed(() -> a_shooter.shooterRun(SpeedConstants.aHigherShootSpeed))
     .whenReleased(() -> a_shooter.shooterRun(0.0));//changed
 
     // new POVButton(a_driverController, 90)
@@ -188,9 +188,9 @@ public class RobotContainer {
     .whenPressed(new ArmControlDown(a_arm))
     .whenReleased(() -> a_arm.intakeArmStop());
 
-    // new JoystickButton(a_operatorController, OperatorButtons.bHalfSpeed)
-    // .whenPressed(() -> a_robotDrive.setMaxOutput(0.5))
-    // .whenReleased(() -> a_robotDrive.setMaxOutput(0.9));
+    new JoystickButton(a_operatorController, OperatorButtons.bHalfSpeed)
+     .whenPressed(() -> a_robotDrive.setMaxOutput(0.5))
+     .whenReleased(() -> a_robotDrive.setMaxOutput(0.9));
 
      new JoystickButton(a_operatorController, OperatorButtons.bFullSpeed)
      .whenPressed(() -> a_robotDrive.setMaxOutput(1.0))
