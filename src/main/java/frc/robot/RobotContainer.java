@@ -126,10 +126,6 @@ public class RobotContainer {
     autoChooser.addOption("Shoot Low", a_ShootLowThenDrive);
     autoChooser.addOption("Simple Auto", m_simpleAuto);
     autoChooser.addOption("Two Ball", m_twoBallAuto);
-    autoChooser.addOption("Two Ball Wall", m_twoBallWallAuto);
-    autoChooser.addOption("Three Ball", m_threeBallAuto);
-    autoChooser.addOption("PATH three ball", m_PATHthreeBall);
-    autoChooser.addOption("Beast Mode", m_beastMode);
     autoChooser.addOption("Right Two Ball", m_RtwoBallAuto);
 
     //Shuffleboard.getTab("Autonomous").add(autoChooser);
