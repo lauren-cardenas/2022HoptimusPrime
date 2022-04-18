@@ -23,9 +23,9 @@ import frc.robot.commands.AutoTwoBall;
 import frc.robot.commands.DriveTimeCommand;
 import frc.robot.commands.RAutoTwoBall;
 import frc.robot.commands.ShootThenDrive;
-import frc.robot.commands.ThreeBallPath;
-import frc.robot.commands.beastMode;
 import frc.robot.commands.unusedCommands.AutoTwoBallWall;
+import frc.robot.commands.unusedCommands.ThreeBallPath;
+import frc.robot.commands.unusedCommands.beastMode;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.driveSubsystem;
 import frc.robot.subsystems.intakeSubsystem;
@@ -58,8 +58,7 @@ public class RobotContainer {
   private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
   private final Command m_simpleAuto =
-    new DriveTimeCommand(
-      AutoConstants.kAutoDriveTime, AutoConstants.kAutoDriveSpeed, a_robotDrive);
+    new DriveTimeCommand(AutoConstants.kAutoDriveTime, AutoConstants.kAutoDriveSpeed, a_robotDrive);
   
   private final Command m_ShootCloseDrive =
     new ShootThenDrive(a_robotDrive, a_shooter, a_transition, 1.5, SpeedConstants.aAutoOneBallShootSpeed,AutoConstants.transitionTime);
@@ -68,18 +67,7 @@ public class RobotContainer {
     new ShootThenDrive(a_robotDrive, a_shooter, a_transition, AutoConstants.shootLowDistance, SpeedConstants.aHigherShootSpeed, AutoConstants.transitionTime );
 
   private final Command m_twoBallAuto =
-    new AutoTwoBall(1.5, AutoConstants.kAutoDriveSpeed, a_robotDrive, a_arm, a_rollerIntake, a_transition, a_shooter);
-
-  private final Command m_twoBallWallAuto =
-    new AutoTwoBallWall(1.5, AutoConstants.kAutoDriveSpeed, a_robotDrive, a_arm, a_rollerIntake, a_transition, a_shooter);  
-  
-  private final Command m_threeBallAuto = 
-    new AutoThreeBall(1.5, AutoConstants.kAutoDriveSpeed - 0.05, a_robotDrive, a_arm, a_rollerIntake, a_transition, a_shooter);
-  private final Command m_beastMode = 
-    new beastMode(5.5, -.6, a_robotDrive, a_arm, a_rollerIntake, a_transition, a_shooter);
-
-  private final Command m_PATHthreeBall =
-    new ThreeBallPath(a_robotDrive, a_shooter, a_transition, a_arm, a_rollerIntake);
+    new AutoTwoBall(1.5, AutoConstants.kAutoDriveSpeed, a_robotDrive, a_arm, a_rollerIntake, a_transition, a_shooter); 
 
   private final Command m_RtwoBallAuto = 
     new RAutoTwoBall(1.5, AutoConstants.kAutoDriveSpeed, a_robotDrive, a_arm, a_rollerIntake, a_transition, a_shooter);
